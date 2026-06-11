@@ -80,9 +80,11 @@
   /* modo texto: largo e compacto p/ caber numa tela só, sem rolar */
   .paper.narr{text-align:left;line-height:1.55;font-size:clamp(14px,1.9vw,19px);
     max-width:min(96vw,1100px);padding:12px 18px}
-  .paper.flash{display:flex;align-items:center;justify-content:center;min-height:200px;padding:30px}
-  .flashcard{font-size:clamp(48px,13vw,96px);font-weight:bold;color:var(--paperink);
-    letter-spacing:1px;padding:10px 20px;border-radius:18px;cursor:pointer;text-align:center}
+  .paper.flash{display:flex;align-items:center;justify-content:center;min-height:150px;padding:22px;max-width:680px}
+  .flashcard{font-size:clamp(40px,10vw,84px);font-weight:bold;color:var(--paperink);line-height:1.05;
+    letter-spacing:1px;padding:8px 14px;border-radius:18px;cursor:pointer;text-align:center;
+    max-width:100%;overflow-wrap:break-word}
+  .flashph{font-size:clamp(20px,4.5vw,30px);color:#b3a9b0;font-weight:bold;text-align:center}
   .flashcard.in{animation:cardIn .28s cubic-bezier(.2,1.4,.4,1)}
   .flashcard.out{animation:cardOut .18s ease-in forwards}
   @keyframes cardIn{from{transform:translateX(60px) scale(.7);opacity:0}to{transform:none;opacity:1}}
@@ -742,7 +744,7 @@ function startMission(i){
   $("#mTitle").textContent=`${cur.ic} ${cur.title}`;$("#mHint").textContent=cur.hint;
   const p=$("#paper");
   if(cur.flash){
-    p.className="paper flash";p.innerHTML='<div class="flashcard" style="color:#a89">Toque em<br>Iniciar 🎮</div>';
+    p.className="paper flash";p.innerHTML='<div class="flashph">👇 Toque em <b>Iniciar</b> 🎮</div>';
   } else { // narrativa: texto corrido
     p.className="paper narr";p.innerHTML="";
     cur.data.forEach((word,idx)=>{
