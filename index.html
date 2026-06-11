@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>🕵️ Agência de Detetives Literários — Prova de Leitura</title>
+<title>🗺️ Exploradores das Palavras — Prova de Leitura</title>
 <style>
   :root{
     --bg1:#1c2b4a; --bg2:#0f1a30; --gold:#ffd35b; --gold2:#f0a93a;
@@ -217,26 +217,26 @@
 
   <!-- INTRO -->
   <section class="screen active" id="s-intro">
-    <div class="badge-big">🕵️</div>
-    <h1>Agência de Detetives Literários</h1>
-    <p class="sub">Treine sua leitura resolvendo mistérios! Leia em voz alta e desarme o caso antes do tempo acabar.</p>
-    <input class="name-in" id="nameIn" placeholder="Seu nome de detetive" maxlength="16">
+    <div class="badge-big">🗺️</div>
+    <h1>Exploradores das Palavras</h1>
+    <p class="sub">Treine sua leitura desbravando aventuras! Leia em voz alta e descubra cada palavra antes do tempo acabar.</p>
+    <input class="name-in" id="nameIn" placeholder="Seu nome de explorador(a)" maxlength="16">
     <div class="avatars" id="avatars"></div>
     <div class="sub" style="margin:2px 0">Em que ano você está?</div>
     <div class="years" id="years"></div>
-    <button class="btn" id="goPlay">🔎 Entrar na Agência</button>
+    <button class="btn" id="goPlay">🧭 Começar a Explorar</button>
   </section>
 
   <!-- MAP -->
   <section class="screen" id="s-map">
     <div class="hud">
-      <span id="hudAv">🕵️</span>
-      <div><div class="who" id="hudName">Detetive</div><div class="rank" id="hudRank">Estagiário</div></div>
+      <span id="hudAv">🧭</span>
+      <div><div class="who" id="hudName">Explorador(a)</div><div class="rank" id="hudRank">Aprendiz</div></div>
       <span class="spacer"></span>
       <span class="stars">⭐ <span id="hudStars">0</span></span>
     </div>
     <div class="xpbar"><div class="xpfill" id="xpFill"></div></div>
-    <h1 style="font-size:24px">📂 Casos da Agência</h1>
+    <h1 style="font-size:24px">🗺️ Mapa das Aventuras</h1>
     <p class="sub">Gincana 1 e 2: leia o máximo de palavras em 60s! Missão 3: a Prova de Campo com o texto secreto.</p>
     <div class="cards" id="missionCards"></div>
     <button class="btn pink" style="margin-top:14px" id="switchStudent">👤 Trocar aluno</button>
@@ -289,7 +289,7 @@
   <section class="screen" id="s-board">
     <div class="corner"><button class="btn ghost" id="boardBack">⬅ Mapa</button></div>
     <h1 style="font-size:24px">🏆 Placar — Melhores PCPM</h1>
-    <p class="sub">Ranking pelo melhor PCPM de cada detetive.</p>
+    <p class="sub">Ranking pelo melhor PCPM de cada explorador(a).</p>
     <div id="boardList" class="cards"></div>
   </section>
 
@@ -415,29 +415,29 @@ const TEXT_BANK=[
 ];
 
 const MISSIONS = [
-  {id:0, ic:"🔦", title:"Gincana das Pistas", hint:"Leia a palavra! A próxima aparece sozinha. Quantas em 60s?",
-   sub:"Gincana de palavras · 60s", bank:"words", flash:true, timed:true, narr:false,
-   reveal:"Olho de detetive afiado! Você reconhece pistas num piscar de olhos. 🔎"},
-  {id:1, ic:"🔐", title:"Gincana dos Códigos", hint:"Decifre o código! Outro pula na hora. Vai fundo!",
-   sub:"Gincana de códigos secretos · 60s", bank:"pseudo", flash:true, timed:true, narr:false,
-   reveal:"Códigos quebrados em alta velocidade! Decifrador nato. 🗝️"},
-  {id:2, ic:"⏱️", title:"Prova de Campo", hint:"Leia o relatório o mais longe que conseguir em 60 segundos!",
+  {id:0, ic:"🔦", title:"Trilha das Palavras", hint:"Leia a palavra! A próxima aparece sozinha. Quantas em 60s?",
+   sub:"Aventura de palavras · 60s", bank:"words", flash:true, timed:true, narr:false,
+   reveal:"Olho de explorador(a) afiado! Você reconhece cada palavra num piscar de olhos. 🔎"},
+  {id:1, ic:"🔐", title:"Trilha dos Códigos", hint:"Decifre o código! Outro pula na hora. Vai fundo!",
+   sub:"Aventura de códigos secretos · 60s", bank:"pseudo", flash:true, timed:true, narr:false,
+   reveal:"Códigos decifrados em alta velocidade! Explorador(a) nato(a). 🗝️"},
+  {id:2, ic:"⏱️", title:"A Grande Expedição", hint:"Leia o texto o mais longe que conseguir em 60 segundos!",
    sub:"Texto secreto sorteado · cronometrado", bank:"text", numbered:false, timed:true, narr:true,
-   reveal:"MISTÉRIO RESOLVIDO! 🎉 Caso encerrado com sucesso, detetive!"}
+   reveal:"EXPEDIÇÃO CONCLUÍDA! 🎉 Aventura desvendada com sucesso, explorador(a)!"}
 ];
 
-const AVATARS=["🕵️","🦸","🐱","🐶","🦊","🐼","🐲","🤖","👽","🦁","🐯","🦉"];
+const AVATARS=["🧭","🦸","🐱","🐶","🦊","🐼","🐲","🤖","👽","🦁","🐯","🦉"];
 const YEARS=["2º ano","3º ano","4º ano","5º ano"];
 // metas por ano: piso fluente 65 universal; "ótimo" alvo da série
 const META={"2º ano":{otimo:80}, "3º ano":{otimo:90}, "4º ano":{otimo:100}, "5º ano":{otimo:110}};
-const RANKS=[{min:0,name:"Estagiário 🔰"},{min:5,name:"Detetive Júnior 🥉"},{min:15,name:"Detetive 🥈"},
-  {min:30,name:"Detetive Sênior 🥇"},{min:50,name:"Detetive Mestre 👑"}];
+const RANKS=[{min:0,name:"Aprendiz 🔰"},{min:5,name:"Explorador(a) Júnior 🥉"},{min:15,name:"Explorador(a) 🥈"},
+  {min:30,name:"Explorador(a) Sênior 🥇"},{min:50,name:"Mestre Explorador(a) 👑"}];
 
 // ============ ESTADO ============
 const SAVE="adl_save_v2";
 let state=loadState();
 function loadState(){let s={};try{s=JSON.parse(localStorage.getItem(SAVE))||{};}catch(e){}
-  return Object.assign({name:"",avatar:"🕵️",ano:"2º ano",stars:0,done:[false,false,false],bestPcpm:0,
+  return Object.assign({name:"",avatar:"🧭",ano:"2º ano",stars:0,done:[false,false,false],bestPcpm:0,
     history:[],settings:{font:"normal",contrast:false},
     inst:{escola:"",prof:"",turma:"",coord:""}},s);}
 function save(){localStorage.setItem(SAVE,JSON.stringify(state));}
@@ -480,14 +480,14 @@ function initIntro(){
     d.onclick=()=>{state.ano=y;document.querySelectorAll(".yr").forEach(x=>x.classList.remove("sel"));d.classList.add("sel");beep(700,0.05);};yr.appendChild(d);});
   $("#nameIn").value=state.name||"";
 }
-$("#goPlay").onclick=()=>{state.name=($("#nameIn").value||"Detetive").trim();save();
+$("#goPlay").onclick=()=>{state.name=($("#nameIn").value||"Explorador(a)").trim();save();
   if(!actx){try{actx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}openMap();};
 
 // ============ MAP ============
 function currentRank(){let r=RANKS[0];RANKS.forEach(x=>{if(state.stars>=x.min)r=x;});return r;}
 function openMap(){
   stopRec();stopTimer();
-  $("#hudAv").textContent=state.avatar;$("#hudName").textContent=state.name||"Detetive";
+  $("#hudAv").textContent=state.avatar;$("#hudName").textContent=state.name||"Explorador(a)";
   $("#hudRank").textContent=currentRank().name;$("#hudStars").textContent=state.stars;
   const cur=currentRank(),next=RANKS[RANKS.indexOf(cur)+1];
   $("#xpFill").style.width=(next?Math.min(100,(state.stars-cur.min)/(next.min-cur.min)*100):100)+"%";
@@ -514,14 +514,14 @@ function openHist(){
     let rows=h.slice().reverse().map(r=>`<tr><td>${fmtDate(r.data)}</td><td>${r.avatar} ${r.nome}</td><td>${r.ano}</td>
       <td>${r.missao}</td><td><b>${r.pcpm}</b></td><td class="${pfClass(r.perfil)}">${r.perfil}</td>
       <td>${r.lidas}</td><td>${r.erros}</td><td>${typeof r.prec==="number"?r.prec+"%":"—"}</td><td>${r.seg}s</td><td>${r.quiz}</td></tr>`).join("");
-    t.innerHTML=`<table class="hist"><thead><tr><th>Data</th><th>Detetive</th><th>Ano</th><th>Missão</th>
+    t.innerHTML=`<table class="hist"><thead><tr><th>Data</th><th>Aluno(a)</th><th>Ano</th><th>Missão</th>
       <th>PCPM</th><th>Perfil</th><th>Lidas</th><th>Erros</th><th>Precisão</th><th>Tempo</th><th>Quiz</th></tr></thead><tbody>${rows}</tbody></table>`;
   }
   show("#s-hist");
 }
 function exportCSV(){
   const h=state.history;if(!h.length){toast("Histórico vazio.");return;}
-  const head=["Data","Detetive","Ano","Missao","PCPM","Perfil","PalavrasCorretas","Erros","PrecisaoPct","TempoSeg","Quiz"];
+  const head=["Data","Aluno","Ano","Missao","PCPM","Perfil","PalavrasCorretas","Erros","PrecisaoPct","TempoSeg","Quiz"];
   const esc=v=>`"${String(v).replace(/"/g,'""')}"`;
   const lines=[head.join(";")].concat(h.map(r=>[fmtDate(r.data),r.nome,r.ano,r.missao,r.pcpm,r.perfil,r.lidas,r.erros,(typeof r.prec==="number"?r.prec:""),r.seg,r.quiz].map(esc).join(";")));
   const blob=new Blob(["﻿"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
@@ -605,7 +605,7 @@ function reportInner(name){
   const rows=recs.slice().reverse().map(r=>`<tr><td>${fmtDate(r.data)}</td><td>${r.missao}</td><td><b>${r.pcpm}</b></td><td>${r.perfil}</td><td>${r.lidas}</td><td>${r.erros}</td><td>${typeof r.prec==="number"?r.prec+"%":"—"}</td><td>${r.seg}s</td><td>${r.quiz}</td></tr>`).join("");
   const inst=state.inst||{};
   const hoje=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
-  const protocolo=`ADL-${ano.replace(/\D/g,"")||"0"}${("0000"+(recs.length)).slice(-3)}-${new Date().getFullYear()}`;
+  const protocolo=`EP-${ano.replace(/\D/g,"")||"0"}${("0000"+(recs.length)).slice(-3)}-${new Date().getFullYear()}`;
   return `
     <div class="rletter">
       <div class="gov">SECRETARIA DE EDUCAÇÃO · ACOMPANHAMENTO DA APRENDIZAGEM</div>
@@ -689,7 +689,7 @@ $("#repShare").onclick=()=>{
   const name=$("#repSel").value,recs=state.history.filter(r=>r.nome===name);if(!recs.length){toast("Sem dados.");return;}
   const best=Math.max(...recs.map(r=>r.pcpm)),ano=recs[recs.length-1].ano;
   const perfil=best<=10?"Pré-leitor":best<=64?"Leitor Iniciante":"Leitor Fluente";
-  const txt=`Relatório de Fluência em Leitura — ${name} (${ano})\nMelhor PCPM: ${best}\nPerfil: ${perfil}\nAvaliações: ${recs.length}\n(Gerado pela Agência de Detetives Literários)`;
+  const txt=`Relatório de Fluência em Leitura — ${name} (${ano})\nMelhor PCPM: ${best}\nPerfil: ${perfil}\nAvaliações: ${recs.length}\n(Gerado pelo app Exploradores das Palavras)`;
   if(navigator.share)navigator.share({title:"Relatório "+name,text:txt}).catch(()=>{});
   else location.href="mailto:?subject="+encodeURIComponent("Relatório de Fluência - "+name)+"&body="+encodeURIComponent(txt+"\n\nDica: use Imprimir/PDF para anexar o relatório completo.");
 };
@@ -738,7 +738,7 @@ function startMission(i){
   else if(cur.bank==="pseudo")cur.data=pick(PSEUDO_BANK_BY_YEAR[state.ano]||PSEUDO_BANK_BY_YEAR["2º ano"],"pseudo");
   else if(cur.bank==="text"){const t=pick(TEXT_BANK,"text");cur.data=t.text.split(/\s+/);curQuestions=t.q;}
   total=cur.data.length;
-  $("#mStudent").textContent=`👤 ${state.name||"Detetive"} · ${state.ano}`;
+  $("#mStudent").textContent=`👤 ${state.name||"Explorador(a)"} · ${state.ano}`;
   $("#mTitle").textContent=`${cur.ic} ${cur.title}`;$("#mHint").textContent=cur.hint;
   const p=$("#paper");
   if(cur.flash){
@@ -902,7 +902,7 @@ function finishTimed(completedAll){
       qline=`<div class="metaline">🧠 Interpretação: ${quiz.correct}/${quiz.total} certas <b style="color:var(--gold)">+${bonus} ⭐</b></div>`;}
     state.stars+=earned;state.done[cur.id]=true;
     // grava no histórico (acompanhamento da turma)
-    state.history.push({nome:state.name||"Detetive",avatar:state.avatar,ano:state.ano,
+    state.history.push({nome:state.name||"Explorador(a)",avatar:state.avatar,ano:state.ano,
       data:new Date().toISOString(),missao:cur.title,pcpm,perfil:perfil.label.replace(/[^\wÀ-ú ]/g,"").trim(),
       lidas:words,erros:errors,prec:precisao,seg:Math.round(elapsed),quiz:quizStr});
     if(state.history.length>5000)state.history=state.history.slice(-5000);
@@ -911,7 +911,7 @@ function finishTimed(completedAll){
     showWin({
       title:cur.flash?"🎮 Gincana encerrada!":"⏱️ Prova de Campo concluída!",
       icon:cur.ic,
-      reveal:(cur.flash||completedAll)?cur.reveal:"Tempo esgotado, detetive! Veja seu resultado:",
+      reveal:(cur.flash||completedAll)?cur.reveal:"Tempo esgotado, explorador(a)! Veja seu resultado:",
       body:`<div class="pcpmbig">${pcpm}</div><div class="sub">Palavras Corretas Por Minuto (PCPM)</div>
         <div class="perfil" style="background:${perfil.bg};color:${perfil.fg}">${perfil.label}</div>
         <div class="metaline">${metaMsg}</div>${qline}
