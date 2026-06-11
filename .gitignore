@@ -1,0 +1,9 @@
+# docs de referência (pesados, não fazem parte do app)
+pdf/
+
+# sistema / editores
+.DS_Store
+Thumbs.db
+.vercel
+node_modules/
+*.log
