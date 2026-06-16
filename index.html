@@ -171,9 +171,9 @@
   .official-step.done{background:#6ee78733;color:var(--green)}
   .official-sheet{background:#fff;color:#111;border-radius:8px;padding:18px;width:100%;max-width:1040px;box-shadow:0 8px 28px #0008}
   .official-sheet h2{text-align:center;margin:0 0 12px;font-family:Arial,sans-serif;font-size:22px}
-  .official-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid #555;border-left:1px solid #555}
-  .official-word{font-family:Arial,sans-serif;font-size:clamp(15px,2vw,23px);padding:8px 10px;border-right:1px solid #555;border-bottom:1px solid #555;
-    text-transform:uppercase;min-width:0;overflow-wrap:anywhere;cursor:pointer}
+  .official-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #555;border-left:1px solid #555}
+  .official-word{font-family:Arial,sans-serif;font-size:clamp(13px,1.7vw,20px);padding:8px 8px;border-right:1px solid #555;border-bottom:1px solid #555;
+    text-transform:uppercase;min-width:0;white-space:nowrap;cursor:pointer}
   .official-word.reached,.official-text .ow.reached{background:#d7f2df;color:#063318}
   .official-text{font-family:Arial,sans-serif;font-size:clamp(17px,2.2vw,25px);line-height:1.65;text-align:left;text-transform:uppercase}
   .official-text .ow{display:inline;position:relative}
@@ -190,8 +190,8 @@
   .official-metric{background:#f1f4f9;border-radius:10px;padding:12px;text-align:center}
   .official-metric b{display:block;font-size:25px;color:#1b2746}
   @media(max-width:620px){
-    .official-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .official-word{font-size:14px;padding:7px 5px}
+    .official-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .official-word{font-size:13px;padding:7px 4px}
     .official-metrics{grid-template-columns:repeat(2,minmax(110px,1fr))}
     .review-row{grid-template-columns:1fr}
   }
@@ -603,8 +603,8 @@
     #repSel{width:100%;margin-bottom:8px!important}
     .official-steps{border-radius:14px}
     .official-step{font-size:10px;padding:7px 8px}
-    .official-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .official-word{font-size:14px;padding:7px 5px}
+    .official-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .official-word{font-size:13px;padding:7px 4px}
   }
   @media print{
     body::before{display:none}
