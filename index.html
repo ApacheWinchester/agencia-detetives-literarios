@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>🗺️ Exploradores das Palavras — Prova de Leitura</title>
+<title>Agência de Detetives Literários</title>
 <style>
   :root{
     --bg1:#1c2b4a; --bg2:#0f1a30; --gold:#ffd35b; --gold2:#f0a93a;
@@ -36,10 +36,10 @@
     background:#fff;color:#2a2218;text-align:center;font-family:inherit;width:min(90vw,340px);margin:8px 0}
   .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
   .avatars{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:420px;margin:4px 0 8px}
-  .av{font-size:34px;background:#ffffff14;border:3px solid transparent;border-radius:14px;padding:5px 9px;cursor:pointer;transition:.15s}
+  .av{font-size:34px;background:#ffffff14;border:3px solid transparent;border-radius:14px;padding:5px 9px;cursor:pointer;transition:.15s;font-family:inherit;color:var(--ink)}
   .av.sel{border-color:var(--gold);background:#ffffff2e;transform:scale(1.12)}
   .years{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:6px 0 12px}
-  .yr{font-size:17px;font-weight:bold;background:#ffffff14;border:3px solid transparent;border-radius:14px;padding:9px 16px;cursor:pointer;color:var(--ink)}
+  .yr{font-size:17px;font-weight:bold;background:#ffffff14;border:3px solid transparent;border-radius:14px;padding:9px 16px;cursor:pointer;color:var(--ink);font-family:inherit}
   .yr.sel{border-color:var(--teal);background:#3fd6c92e;color:#fff}
 
   .hud{display:flex;align-items:center;gap:10px;width:100%;max-width:760px;background:#ffffff14;
@@ -53,7 +53,8 @@
 
   .cards{display:flex;flex-direction:column;gap:12px;width:100%;max-width:560px}
   .card{background:linear-gradient(180deg,#27345a,#1b2746);border:2px solid #ffffff22;border-radius:20px;
-    padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:.15s;box-shadow:0 6px 0 #00000033}
+    padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:.15s;box-shadow:0 6px 0 #00000033;
+    width:100%;color:var(--ink);font-family:inherit;text-align:left}
   .card:active{transform:translateY(3px)}
   .card.locked{opacity:.45;filter:grayscale(.6);cursor:not-allowed}
   .card .ic{font-size:42px}
@@ -61,6 +62,13 @@
   .card .tt b{font-size:19px;display:block}
   .card .tt small{color:var(--muted)}
   .card .done{font-size:24px}
+  .official-launch{width:100%;max-width:560px;border:3px solid var(--teal);background:linear-gradient(135deg,#153d4a,#245b65);
+    color:#fff;border-radius:22px;padding:18px;display:flex;align-items:center;gap:14px;font-family:inherit;text-align:left;
+    cursor:pointer;box-shadow:0 7px 0 #061b20;margin:4px 0 16px}
+  .official-launch strong{font-size:21px;display:block;color:var(--gold)}
+  .official-launch small{display:block;color:#c8f8f4;margin-top:4px}
+  .official-launch .ic{font-size:42px}
+  .section-label{width:100%;max-width:560px;color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:1.4px;margin:3px 0 8px}
 
   .mission-head{text-align:center;margin-bottom:6px}
   .mission-head h2{margin:2px 0;color:var(--gold);font-size:22px}
@@ -97,6 +105,7 @@
   .w.cur{background:#fff3c4;border-color:var(--gold2);box-shadow:0 0 0 3px #ffd35b80}
   .w.read{background:linear-gradient(180deg,#6ee787,#33c95e);color:#063318;border-color:#2faf50;animation:pop .3s}
   .paper.narr .w.read{background:#cdeccd;color:#0a4a1e;border-color:transparent}
+  .w.error,.paper.narr .w.error{background:#ffd4d0;color:#7b1710;border-color:#e0524a;text-decoration:line-through}
   @keyframes pop{0%{transform:scale(1.3)}60%{transform:scale(.92)}100%{transform:scale(1)}}
   .w .n{font-size:11px;color:#b08a3a;vertical-align:super}
 
@@ -155,33 +164,66 @@
   .boardrow .pcv{font-size:24px;font-weight:bold;color:var(--teal);margin-left:auto}
   .setrow{display:flex;align-items:center;gap:10px;background:#ffffff14;border:2px solid #ffffff22;border-radius:14px;padding:12px 16px;margin:8px 0;width:100%;max-width:420px}
   .setrow .lbl{flex:1;font-size:16px}
+  .official-panel{width:100%;max-width:1050px;display:flex;flex-direction:column;align-items:center}
+  .official-steps{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:6px 0 10px}
+  .official-step{padding:7px 12px;border-radius:20px;background:#ffffff12;color:var(--muted);font-size:13px;border:1px solid #ffffff22}
+  .official-step.active{background:var(--teal);color:#062b27;font-weight:bold}
+  .official-step.done{background:#6ee78733;color:var(--green)}
+  .official-sheet{background:#fff;color:#111;border-radius:8px;padding:18px;width:100%;max-width:1040px;box-shadow:0 8px 28px #0008}
+  .official-sheet h2{text-align:center;margin:0 0 12px;font-family:Arial,sans-serif;font-size:22px}
+  .official-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid #555;border-left:1px solid #555}
+  .official-word{font-family:Arial,sans-serif;font-size:clamp(15px,2vw,23px);padding:8px 10px;border-right:1px solid #555;border-bottom:1px solid #555;
+    text-transform:uppercase;min-width:0;overflow-wrap:anywhere;cursor:pointer}
+  .official-word.reached,.official-text .ow.reached{background:#d7f2df;color:#063318}
+  .official-text{font-family:Arial,sans-serif;font-size:clamp(17px,2.2vw,25px);line-height:1.65;text-align:left;text-transform:uppercase}
+  .official-text .ow{display:inline;position:relative}
+  .official-text .ow::after{content:attr(data-n);font-size:8px;color:#777;vertical-align:super;margin-left:1px}
+  .official-note{background:#ffffff12;border:2px solid #ffffff22;border-radius:16px;padding:14px 18px;max-width:760px;line-height:1.5}
+  .official-timer{font-size:46px;font-weight:bold;color:var(--gold);font-variant-numeric:tabular-nums;margin:5px 0}
+  .review-form{background:#fff;color:#222;border-radius:18px;padding:20px;width:100%;max-width:650px;box-shadow:0 10px 30px #0007}
+  .review-form h2{color:#1b2746;text-align:center;margin-top:0}
+  .review-row{display:grid;grid-template-columns:1fr minmax(100px,180px);gap:12px;align-items:center;margin:12px 0;text-align:left}
+  .review-row input,.review-row select{font:inherit;padding:10px;border:2px solid #aab5c8;border-radius:10px;width:100%;background:#fff;color:#222}
+  .official-result{background:#fff;color:#222;border-radius:18px;padding:24px;width:100%;max-width:760px;box-shadow:0 10px 30px #0007}
+  .official-result .profile{display:inline-block;border-radius:20px;padding:9px 18px;color:#fff;font-size:22px;font-weight:bold}
+  .official-metrics{display:grid;grid-template-columns:repeat(3,minmax(110px,1fr));gap:10px;margin:16px 0}
+  .official-metric{background:#f1f4f9;border-radius:10px;padding:12px;text-align:center}
+  .official-metric b{display:block;font-size:25px;color:#1b2746}
+  @media(max-width:620px){
+    .official-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .official-word{font-size:14px;padding:7px 5px}
+    .official-metrics{grid-template-columns:repeat(2,minmax(110px,1fr))}
+    .review-row{grid-template-columns:1fr}
+  }
   /* relatório — documento institucional formal */
-  .report{background:#fff;color:#222;border-radius:8px;padding:38px 42px;width:100%;max-width:860px;margin:14px 0 40px;
-    line-height:1.55;box-shadow:0 8px 24px #00000055;font-family:"Georgia","Cambria","Times New Roman",serif}
-  .report h2{color:#1b2746;border-bottom:2px solid #1b2746;padding-bottom:5px;margin:22px 0 10px;font-size:16px;
-    text-transform:uppercase;letter-spacing:.6px;font-weight:bold}
+  .report{background:#fff;color:#263244;border-radius:10px;padding:34px 38px;width:100%;max-width:900px;margin:14px 0 40px;
+    line-height:1.5;box-shadow:0 8px 24px #00000055;font-family:Arial,"Helvetica Neue",sans-serif}
+  .report h2{color:#17345c;border-bottom:1px solid #b9c7d9;padding-bottom:6px;margin:24px 0 12px;font-size:14px;
+    text-transform:uppercase;letter-spacing:1px;font-weight:800}
   .report h2:first-child{margin-top:0}
-  /* timbre institucional */
-  .report .rletter{text-align:center;border-bottom:3px double #1b2746;padding-bottom:14px;margin-bottom:16px}
-  .report .rletter .gov{font-size:11px;color:#555;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
-  .report .rletter .esc{font-size:19px;font-weight:bold;color:#1b2746;letter-spacing:.5px}
-  .report .rletter .doc{font-size:16px;color:#1b2746;margin-top:6px;text-transform:uppercase;letter-spacing:1.2px;font-weight:bold}
-  .report .rletter .sub2{font-size:12px;color:#777;margin-top:3px}
-  .report .rletter .proto{font-size:11px;color:#888;margin-top:8px;font-style:italic}
-  .ridtable.gloss td{font-size:12px}
-  .ridtable.gloss td.k{width:160px;vertical-align:top}
+  .report .rletter{border-bottom:3px solid #17345c;padding-bottom:16px;margin-bottom:18px}
+  .report .rletter .brand{font-size:11px;color:#55708f;letter-spacing:1.8px;text-transform:uppercase;font-weight:700}
+  .report .rletter .esc{font-size:20px;font-weight:800;color:#17345c;margin-top:5px}
+  .report .rletter .doc{font-size:24px;color:#172437;margin-top:12px;font-weight:800}
+  .report .rletter .sub2{font-size:12px;color:#5e6d7f;margin-top:5px}
+  .report .rletter .proto{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:10px;color:#718096;margin-top:12px}
+  .report-callout{background:#eef5fb;border:1px solid #c8d9e8;border-left:5px solid #24679f;border-radius:6px;padding:12px 14px;font-size:12px;margin:12px 0}
   /* bloco de identificação */
   .ridtable{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 4px}
-  .ridtable td{border:1px solid #ccc;padding:6px 9px}
-  .ridtable td.k{background:#f4f6fb;font-weight:bold;color:#1b2746;width:130px;white-space:nowrap}
-  .rstats{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
-  .rstat{background:#f4f6fb;border:1px solid #e2e6ef;border-radius:6px;padding:10px 14px;min-width:110px;text-align:center}
-  .rstat b{display:block;font-size:26px;color:#1b2746}
-  .rstat small{color:#777}
+  .ridtable td{border:1px solid #cfdae6;padding:8px 10px}
+  .ridtable td.k{background:#f1f5f9;font-weight:bold;color:#17345c;width:130px;white-space:nowrap}
+  .rstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:12px 0}
+  .rstat{background:#f5f8fb;border:1px solid #d8e1eb;border-radius:7px;padding:12px 8px;text-align:center}
+  .rstat b{display:block;font-size:24px;color:#17345c}
+  .rstat small{color:#64748b;font-size:11px}
+  .rstat.profile-stat{background:#17345c;border-color:#17345c}
+  .rstat.profile-stat b,.rstat.profile-stat small{color:#fff}
   .report table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
-  .report th,.report td{border:1px solid #ccc;padding:6px 8px;text-align:left}
-  .report th{background:#1b2746;color:#fff;font-weight:bold}
-  .parecer{background:#f8f9fc;border-left:4px solid #1b2746;padding:14px 18px;border-radius:0 6px 6px 0;margin-top:8px;text-align:justify}
+  .report th,.report td{border:1px solid #cfdae6;padding:7px 9px;text-align:left}
+  .report th{background:#17345c;color:#fff;font-weight:bold}
+  .report tbody tr:nth-child(even){background:#f8fafc}
+  .parecer{background:#f7f9fc;border:1px solid #dce4ed;border-left:5px solid #17345c;padding:14px 16px;border-radius:6px;margin-top:8px}
+  .parecer p{margin:0 0 8px}.parecer p:last-child{margin-bottom:0}
   .badgeR{display:inline-block;padding:3px 12px;border-radius:4px;font-weight:bold;font-size:13px;color:#fff}
   .spark{display:flex;align-items:flex-end;gap:4px;height:70px;margin:8px 0}
   .spark .bar{flex:1;background:linear-gradient(180deg,#3a4d7a,#1b2746);border-radius:3px 3px 0 0;min-height:3px;position:relative}
@@ -189,12 +231,17 @@
   /* assinaturas */
   .rsign{display:flex;gap:40px;justify-content:space-around;margin:46px 0 6px;flex-wrap:wrap}
   .rsign .sg{flex:1;min-width:200px;text-align:center;border-top:1px solid #333;padding-top:6px;font-size:13px;color:#333}
-  .rfoot{margin-top:24px;border-top:1px solid #ddd;padding-top:8px;font-size:11px;color:#888;text-align:justify}
+  .rfoot{margin-top:22px;border-top:1px solid #d7e0e9;padding-top:10px;font-size:10px;color:#68778a;text-align:justify}
   /* campos institucionais (entrada) */
   .repfields{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
   .repfields input{font-family:inherit;font-size:14px;padding:9px 12px;border-radius:10px;border:2px solid #ffffff44;
     background:#ffffff14;color:var(--ink)}
   .repfields input::placeholder{color:#ffffff77}
+  @media(max-width:700px){
+    .report{padding:24px 18px}
+    .rstats{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .report .rletter .doc{font-size:20px}
+  }
   /* acessibilidade */
   body.a-big{font-size:118%}
   body.a-big .flashcard{font-size:clamp(60px,16vw,120px)}
@@ -203,14 +250,366 @@
   body.a-contrast .paper{background:#fff;color:#000}
   body.a-contrast .screen{color:#fff}
   @media print{
+    @page{size:A4;margin:12mm}
     body{background:#fff!important}
     .screen{position:static!important;display:none!important}
     #s-report{display:block!important;padding:0}
     .noprint,.corner,#fx,.toast,.combo{display:none!important}
     #repBody{display:block!important}
-    .report{box-shadow:none!important;margin:0 auto;max-width:100%;border-radius:0;page-break-after:always}
+    .report{box-shadow:none!important;margin:0 auto;padding:0;max-width:100%;border-radius:0;page-break-after:always;font-size:11px}
     .report:last-child{page-break-after:auto}
-    .report h2,.report table,.parecer,.rsign{page-break-inside:avoid}
+    .report h2,.report table,.parecer,.rsign,.rstats,.report-callout{page-break-inside:avoid}
+  }
+</style>
+<style id="agency-redesign">
+  :root{
+    --navy-950:#071923;
+    --navy-900:#0b2430;
+    --navy-800:#123747;
+    --navy-700:#1b4b5d;
+    --cream-50:#fffdf7;
+    --cream-100:#f8f1df;
+    --cream-200:#eadfc6;
+    --amber-300:#ffd66b;
+    --amber-400:#f7bd3f;
+    --amber-500:#e69b19;
+    --cyan-300:#72dfd4;
+    --cyan-400:#3fc9bd;
+    --coral-400:#ef7d6c;
+    --green-400:#61c989;
+    --text:#13252e;
+    --text-soft:#58707a;
+    --white:#fff;
+    --border:rgba(255,255,255,.13);
+    --shadow:0 24px 70px rgba(3,17,24,.3);
+    --shadow-soft:0 12px 35px rgba(3,17,24,.18);
+    --radius-xl:30px;
+    --radius-lg:22px;
+    --radius-md:16px;
+    --gold:var(--amber-300);
+    --gold2:var(--amber-500);
+    --ink:var(--cream-50);
+    --teal:var(--cyan-400);
+    --pink:var(--coral-400);
+    --green:var(--green-400);
+    --red:#e7645b;
+    --paper:var(--cream-50);
+    --paperink:var(--text);
+    --muted:#a9bec5;
+  }
+  html,body{font-family:"Segoe UI Variable","Segoe UI",Arial,sans-serif}
+  body{
+    background:
+      radial-gradient(circle at 12% 8%,rgba(63,201,189,.17),transparent 30%),
+      radial-gradient(circle at 88% 5%,rgba(247,189,63,.12),transparent 28%),
+      linear-gradient(145deg,var(--navy-900),var(--navy-950) 72%);
+    color:var(--cream-50);
+    user-select:none;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;
+    background-image:
+      linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+    background-size:42px 42px;
+    mask-image:linear-gradient(to bottom,black,transparent 86%);
+  }
+  .screen{padding:28px 24px 48px}
+  .screen.active{animation:agencyFade .32s ease both}
+  @keyframes agencyFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  h1{font-size:clamp(30px,5vw,52px);color:var(--cream-50);text-shadow:none;letter-spacing:-1.5px;line-height:1.02}
+  .sub{color:var(--muted);font-size:15px;line-height:1.55;max-width:660px}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--amber-300);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1.8px}
+  .eyebrow::before{content:"";width:24px;height:2px;background:currentColor;border-radius:3px}
+  .brand-mark{width:72px;height:72px;display:grid;place-items:center;border-radius:22px;
+    background:linear-gradient(145deg,var(--amber-300),var(--amber-500));color:var(--navy-950);
+    box-shadow:0 14px 32px rgba(230,155,25,.24);flex:0 0 auto}
+  .brand-mark svg{width:43px;height:43px}
+  .brand-lockup{display:flex;align-items:center;gap:15px}
+  .brand-copy strong{display:block;font-size:19px;line-height:1.1;letter-spacing:-.3px}
+  .brand-copy small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1.2px;margin-top:4px}
+
+  .btn{
+    min-height:48px;border-radius:14px;padding:12px 20px;margin:5px;border:1px solid transparent;
+    background:var(--amber-300);color:var(--navy-950);box-shadow:0 8px 22px rgba(230,155,25,.18);
+    font:700 15px/1.1 inherit;transition:transform .16s,box-shadow .16s,background .16s,border-color .16s;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(3,17,24,.25)}
+  .btn:active{transform:translateY(1px);box-shadow:none}
+  .btn.teal{background:var(--cyan-400);color:var(--navy-950)}
+  .btn.pink{background:var(--coral-400);color:#2d1714}
+  .btn.ghost{background:rgba(255,255,255,.055);color:var(--cream-50);border:1px solid var(--border);font-size:14px;padding:10px 15px}
+  .btn.ghost:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.23)}
+  .corner{top:18px;right:18px}
+  .corner .btn{backdrop-filter:blur(12px)}
+
+  /* Entrada */
+  #s-intro{justify-content:center;padding:24px}
+  .landing-shell{width:min(1120px,100%);display:grid;grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr);flex-shrink:0;
+    background:rgba(9,34,45,.72);border:1px solid var(--border);border-radius:36px;overflow:hidden;
+    box-shadow:var(--shadow);backdrop-filter:blur(18px)}
+  .landing-story{position:relative;padding:54px 52px;display:flex;flex-direction:column;justify-content:space-between;min-height:650px;
+    background:
+      linear-gradient(160deg,rgba(18,55,71,.82),rgba(7,25,35,.94)),
+      radial-gradient(circle at 90% 15%,rgba(247,189,63,.25),transparent 27%)}
+  .landing-story::after{content:"CONFIDENCIAL";position:absolute;right:-25px;bottom:90px;transform:rotate(-90deg);
+    font-size:11px;letter-spacing:5px;color:rgba(255,255,255,.16);font-weight:900}
+  .landing-story h1{text-align:left;margin:35px 0 18px;max-width:620px;font-size:clamp(42px,6vw,76px)}
+  .landing-story h1 span{color:var(--amber-300)}
+  .landing-story .lead{font-size:18px;line-height:1.65;color:#c8d8dd;max-width:560px;margin:0}
+  .feature-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:34px}
+  .feature-chip{padding:14px;border-radius:15px;background:rgba(255,255,255,.06);border:1px solid var(--border)}
+  .feature-chip b{display:block;color:var(--cream-50);font-size:13px}
+  .feature-chip span{display:block;color:var(--muted);font-size:11px;margin-top:4px;line-height:1.35}
+  .landing-form{background:var(--cream-50);color:var(--text);padding:48px 42px;display:flex;flex-direction:column;justify-content:center}
+  .landing-form h2{font-size:30px;margin:0 0 8px;color:var(--text);letter-spacing:-.8px}
+  .landing-form .form-lead{color:var(--text-soft);font-size:14px;line-height:1.5;margin:0 0 20px}
+  .field-label{display:block;font-size:11px;font-weight:800;color:#6b7b83;text-transform:uppercase;letter-spacing:1.2px;margin:14px 0 7px}
+  .name-in{width:100%;max-width:none;margin:0;border:1px solid #d6dedf;border-radius:14px;background:#fff;color:var(--text);
+    box-shadow:0 5px 18px rgba(14,48,59,.07);font:600 17px inherit;text-align:left;padding:15px 16px}
+  .name-in:focus,.repfields input:focus{outline:3px solid rgba(63,201,189,.24);border-color:var(--cyan-400)}
+  .is-invalid{border-color:var(--red)!important;outline:3px solid rgba(231,100,91,.2)!important}
+  .field-error{display:block;min-height:18px;margin:6px 0 0;color:#d24f45;font-size:12px;font-weight:700}
+  .avatars{max-width:none;justify-content:flex-start;gap:7px;margin:0}
+  .av{width:48px;height:48px;padding:0;display:grid;place-items:center;font-size:25px;background:#f2f5f3;color:var(--text);
+    border:2px solid transparent;border-radius:13px}
+  .av:hover{background:#e7eeeb}
+  .av.sel{border-color:var(--navy-700);background:#e8f6f3;transform:none;box-shadow:0 0 0 3px rgba(63,201,189,.2)}
+  .years{justify-content:flex-start;gap:7px;margin:0 0 20px}
+  .yr{background:#f2f5f3;color:#556870;border:1px solid #dbe3e1;border-radius:12px;padding:10px 14px;font-size:14px}
+  .yr.sel{border-color:var(--navy-700);background:var(--navy-800);color:#fff}
+  .landing-form #goPlay{width:100%;margin:4px 0 0;min-height:54px;font-size:16px}
+
+  /* Painel principal */
+  #s-map{padding-top:22px}
+  .dashboard-shell{width:min(1120px,100%)}
+  .appbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:28px}
+  .hud{width:auto;max-width:none;margin:0;padding:8px 10px 8px 8px;border-radius:18px;background:rgba(255,255,255,.065);
+    border:1px solid var(--border);backdrop-filter:blur(12px)}
+  .hud #hudAv{width:44px;height:44px;display:grid;place-items:center;background:var(--cream-50);border-radius:13px;font-size:23px}
+  .hud .who{font-size:15px}
+  .hud .rank{color:var(--cyan-300);font-size:11px}
+  .hud .stars{padding:8px 11px;border-radius:12px;background:rgba(247,189,63,.12);font-size:14px}
+  .xpbar{display:none}
+  .dashboard-hero{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:24px}
+  .dashboard-hero h1{text-align:left;margin:8px 0 7px;font-size:clamp(36px,5vw,58px)}
+  .dashboard-hero p{margin:0;color:var(--muted);font-size:15px;line-height:1.55;max-width:610px}
+  .progress-pill{display:flex;align-items:center;gap:12px;min-width:190px;padding:13px 15px;border:1px solid var(--border);
+    background:rgba(255,255,255,.055);border-radius:16px}
+  .progress-pill .progress-icon{width:40px;height:40px;border-radius:12px;background:rgba(114,223,212,.13);display:grid;place-items:center}
+  .progress-pill b{display:block;font-size:14px}
+  .progress-pill small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+  .dashboard-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr);gap:18px;align-items:start}
+  .dashboard-main,.dashboard-side{display:flex;flex-direction:column;gap:18px}
+  .panel{border:1px solid var(--border);border-radius:var(--radius-xl);background:rgba(255,255,255,.052);
+    box-shadow:var(--shadow-soft);backdrop-filter:blur(14px)}
+  .panel-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px 0}
+  .panel-head h2{margin:0;font-size:19px;letter-spacing:-.3px}
+  .panel-head span{color:var(--muted);font-size:12px}
+  .official-launch{max-width:none;margin:0;padding:26px;border:1px solid rgba(255,214,107,.3);border-radius:var(--radius-xl);
+    background:
+      linear-gradient(135deg,rgba(247,189,63,.17),rgba(63,201,189,.08)),
+      rgba(255,255,255,.055);box-shadow:var(--shadow-soft);align-items:flex-start;gap:20px}
+  .official-launch:hover{transform:translateY(-3px);border-color:rgba(255,214,107,.55)}
+  .official-launch .ic{width:64px;height:64px;border-radius:18px;background:var(--amber-300);color:var(--navy-950);
+    display:grid;place-items:center;font-size:29px;flex:0 0 auto}
+  .official-launch strong{font-size:24px;color:var(--cream-50);letter-spacing:-.5px}
+  .official-launch small{font-size:13px;line-height:1.55;color:#b9ccd2;max-width:550px}
+  .official-launch .launch-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+  .official-launch .launch-meta em{font-style:normal;font-size:10px;text-transform:uppercase;letter-spacing:.8px;font-weight:800;
+    padding:6px 9px;border-radius:20px;background:rgba(255,255,255,.08);color:var(--cyan-300)}
+  .section-label{max-width:none;margin:0;padding:19px 22px 5px;font-size:11px}
+  .cards{max-width:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:12px 18px 20px}
+  .card{min-height:184px;padding:18px;display:flex;flex-direction:column;align-items:flex-start;gap:11px;border-radius:19px;
+    background:rgba(255,255,255,.055);border:1px solid var(--border);box-shadow:none;position:relative;overflow:hidden}
+  .card::after{content:"";position:absolute;width:95px;height:95px;border-radius:50%;right:-35px;bottom:-40px;background:rgba(255,255,255,.035)}
+  .card:hover{transform:translateY(-3px);background:rgba(255,255,255,.085);border-color:rgba(255,255,255,.2)}
+  .card .ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:24px;background:rgba(114,223,212,.12)}
+  .card:nth-child(2) .ic{background:rgba(255,214,107,.13)}
+  .card:nth-child(3) .ic{background:rgba(239,125,108,.13)}
+  .card .tt b{font-size:16px;line-height:1.25}
+  .card .tt small{font-size:11px;line-height:1.4;display:block;margin-top:6px}
+  .card .done{position:absolute;right:15px;top:15px;font-size:16px}
+  .quick-panel{padding:20px}
+  .quick-panel h2{font-size:17px;margin:0 0 5px}
+  .quick-panel>p{font-size:12px;color:var(--muted);line-height:1.45;margin:0 0 16px}
+  .quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .quick-grid .btn{margin:0;min-height:70px;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:4px}
+  .quick-grid .btn b{font-size:13px}
+  .quick-grid .btn small{font-size:10px;color:var(--muted);font-weight:500}
+  .student-actions{display:flex;gap:8px;margin-top:12px}
+  .student-actions .btn{flex:1;margin:0}
+
+  /* Telas internas */
+  .page-shell{width:min(1040px,100%);padding-top:18px}
+  .page-header{text-align:left;margin:28px 0 20px}
+  .page-header h1{text-align:left;font-size:clamp(32px,5vw,48px);margin:7px 0}
+  .page-header .sub{text-align:left;margin:0}
+  .tablewrap{max-width:none;border:1px solid var(--border);border-radius:20px;background:rgba(255,255,255,.05);padding:10px;box-shadow:var(--shadow-soft)}
+  table.hist{font-size:12px}
+  table.hist th{background:var(--navy-800);color:var(--cream-100);position:static}
+  table.hist th,table.hist td{padding:12px 11px;border-bottom-color:rgba(255,255,255,.08)}
+  table.hist tr:nth-child(even){background:rgba(255,255,255,.025)}
+  #boardList.cards{display:flex;padding:0;gap:10px}
+  #boardList .card{min-height:auto;display:block;padding:17px 18px}
+  .boardrow .pos{color:var(--amber-300)}
+  .boardrow .pcv{color:var(--cyan-300)}
+
+  #s-report .noprint{max-width:1040px!important}
+  #s-report .noprint>h1{text-align:left;margin-top:28px}
+  #s-report .noprint>.sub{text-align:left;max-width:720px}
+  .report-toolbar{padding:20px;border:1px solid var(--border);border-radius:22px;background:rgba(255,255,255,.05);margin:18px 0}
+  .repfields{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;margin:0 0 12px}
+  .repfields input{grid-column:span 2;min-width:0;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:12px;color:var(--cream-50);padding:12px}
+  .repfields input:first-child{grid-column:span 3}
+  .repfields input:nth-child(2){grid-column:span 3}
+  .report-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .report-actions .row{justify-content:flex-start}
+  #repSel{width:240px;min-width:0!important;margin:0!important;background:var(--cream-50);color:var(--text);font-size:14px}
+  .report{box-shadow:0 25px 70px rgba(0,0,0,.25)}
+  .empty-state{width:100%;max-width:900px;padding:42px 28px;border:1px dashed rgba(255,255,255,.2);border-radius:22px;
+    background:rgba(255,255,255,.045);text-align:center;color:var(--muted)}
+  .empty-state b{display:block;color:var(--cream-50);font-size:20px;margin-bottom:7px}
+
+  /* Avaliação */
+  #s-official{padding-top:82px}
+  .official-panel{max-width:1120px}
+  .official-steps{padding:7px;background:rgba(255,255,255,.055);border:1px solid var(--border);border-radius:18px;margin-bottom:20px}
+  .official-step{border:none;background:transparent;padding:9px 13px}
+  .official-step.active{background:var(--amber-300);color:var(--navy-950)}
+  .official-step.done{background:rgba(97,201,137,.13);color:#8de7ad}
+  .official-result,.review-form{border-radius:24px;box-shadow:var(--shadow);padding:28px}
+  .official-result{max-width:820px}
+  .official-result h1,.official-result h2{color:var(--text);text-shadow:none}
+  .review-form .btn.ghost,.official-result .btn.ghost{background:#eef3f2;color:var(--text);border-color:#d7e1df}
+  .review-form .btn.ghost:hover,.official-result .btn.ghost:hover{background:#e1ece9}
+  .official-note{border-radius:14px}
+  .official-sheet{position:relative;border-radius:18px;padding:24px;box-shadow:var(--shadow);border:1px solid #e1e6df}
+  .official-grid{border-color:#c7d0ce}
+  .official-word{border-color:#c7d0ce}
+  .timer,.official-timer{overflow:visible}
+  .timer{--fuse-start:77px;--fuse-width:42px;width:118px;height:118px;margin:16px 4px 8px;filter:drop-shadow(0 16px 24px rgba(0,0,0,.28))}
+  .timer svg{width:106px;height:106px;margin:12px 0 0 0;border-radius:50%;
+    background:radial-gradient(circle at 36% 28%,#315466 0 9%,#132f3d 35%,#081a23 75%);
+    box-shadow:inset -10px -12px 18px rgba(0,0,0,.36),inset 7px 7px 10px rgba(255,255,255,.06)}
+  .timer svg circle:first-child{stroke:rgba(255,255,255,.09)}
+  .timer #ring{stroke:var(--amber-300)!important}
+  .timer .tnum{inset:12px 12px 0 0;font-size:31px;color:var(--cream-50)}
+  .timer::before,.official-timer::before{
+    content:"";position:absolute;z-index:-1;left:var(--fuse-start);width:var(--fuse-width);height:31px;
+    border-top:7px solid #8d6a3c;border-radius:55%;transform:rotate(-30deg);transform-origin:left bottom;
+    transition:width .1s linear;
+  }
+  .timer::before{top:0}
+  .timer::after,.official-timer::after{
+    content:"✦";position:absolute;left:calc(var(--fuse-start) + var(--fuse-width) - 3px);color:var(--amber-300);font-size:26px;line-height:1;
+    text-shadow:0 0 9px #ff9e2c,0 0 18px #ff5b25;animation:fuseSpark .55s ease-in-out infinite alternate;
+    transition:left .1s linear;
+  }
+  .timer::after{top:-7px}
+  @keyframes fuseSpark{from{transform:scale(.7) rotate(-12deg);opacity:.6}to{transform:scale(1.2) rotate(15deg);opacity:1}}
+  .timer.warn::after,.official-timer.warn::after{color:#fff;animation:fuseSpark .16s infinite alternate}
+  .timer.warn svg,.official-timer.warn{box-shadow:0 0 0 5px rgba(231,100,91,.16),0 0 30px rgba(231,100,91,.25)}
+  .timer.boom svg,.official-timer.boom{animation:bombBoom .55s ease both}
+  .timer.boom::after,.official-timer.boom::after{content:"BOOM!";font-size:18px;font-weight:900;letter-spacing:1px;color:var(--cream-50)}
+  @keyframes bombBoom{0%{transform:scale(1)}35%{transform:scale(1.16) rotate(-4deg)}70%{transform:scale(.92) rotate(3deg)}100%{transform:scale(1)}}
+  .official-timer{--fuse-start:62px;--fuse-width:42px;position:relative;width:94px;height:94px;border-radius:50%;display:grid;place-items:center;
+    background:radial-gradient(circle at 36% 28%,#315466 0 9%,#132f3d 35%,#081a23 75%);
+    border:5px solid rgba(255,214,107,.78);font-size:34px;color:var(--cream-50);
+    box-shadow:inset -9px -11px 15px rgba(0,0,0,.34),0 15px 28px rgba(0,0,0,.22);margin:18px 0 15px}
+  .official-timer::before{top:-13px}
+  .official-timer::after{top:-19px}
+  .paper.detonate,.official-sheet.detonate{animation:caseShake .68s ease both;overflow:hidden}
+  .paper.detonate::before,.official-sheet.detonate::before{
+    content:"💥  BOOM!";position:absolute;inset:0;z-index:20;display:grid;place-items:center;pointer-events:none;
+    color:#fff;font:900 clamp(34px,8vw,74px)/1 inherit;letter-spacing:3px;text-shadow:0 4px 0 #a22,0 0 30px #ffb12b;
+    background:
+      radial-gradient(circle at 50% 50%,rgba(255,238,160,.98) 0 9%,rgba(255,157,35,.94) 10% 23%,rgba(218,61,39,.88) 24% 39%,rgba(20,27,31,.86) 40% 64%,rgba(20,27,31,0) 72%);
+    animation:blastCloud .82s ease-out both;
+  }
+  @keyframes caseShake{
+    0%,100%{transform:none}15%{transform:translate(-8px,3px) rotate(-1deg)}30%{transform:translate(8px,-4px) rotate(1deg)}
+    45%{transform:translate(-6px,-2px)}60%{transform:translate(5px,3px)}75%{transform:translate(-2px,1px)}
+  }
+  @keyframes blastCloud{
+    0%{opacity:0;transform:scale(.2)}18%{opacity:1;transform:scale(1.08)}55%{opacity:.96;transform:scale(.96)}
+    100%{opacity:0;transform:scale(1.35);filter:blur(5px)}
+  }
+  .mission-head h2{font-size:28px;color:var(--cream-50);letter-spacing:-.5px}
+  .mission-head p{font-size:14px}
+  .review-row input,.review-row select{border:1px solid #ccd7d8;border-radius:12px}
+  .review-alert{background:#fff7df;border:1px solid #e2c46d;color:#4e3a05;border-radius:12px;padding:12px 14px;margin:10px 0;font-size:13px;line-height:1.45}
+  .review-alert.ok{background:#eef8f2;border-color:#9bd7ad;color:#173d24}
+  .zero-confirm{display:flex;gap:8px;align-items:flex-start;background:#f7f9fc;border:1px solid #d8e1e8;border-radius:12px;padding:10px 12px;margin:10px 0;font-size:13px}
+  .zero-confirm input{width:auto!important;margin-top:2px}
+  .official-metric{border:1px solid #dfe6e7;border-radius:14px}
+
+  /* Missões */
+  #s-play{padding-top:76px}
+  .paper{position:relative;border-radius:24px;box-shadow:var(--shadow);border:1px solid var(--cream-200)}
+  .voicebar{border-radius:17px;background:rgba(255,255,255,.055);border:1px solid var(--border)}
+  .pbar{height:10px;border:none;background:rgba(255,255,255,.1)}
+  .pfill{background:linear-gradient(90deg,var(--cyan-400),var(--amber-300))}
+  .durctl{border:1px solid var(--border);background:rgba(255,255,255,.055)}
+  .durbtn{background:var(--amber-300)}
+  .timer{width:104px;height:104px}
+  .timer .tnum{font-size:32px}
+  .winbox{background:linear-gradient(160deg,var(--navy-800),var(--navy-950));border:1px solid rgba(255,214,107,.4);border-radius:26px;box-shadow:var(--shadow)}
+
+  /* Ajustes */
+  .setrow{max-width:520px;border:1px solid var(--border);background:rgba(255,255,255,.055);border-radius:16px}
+
+  @media(max-width:900px){
+    #s-intro{justify-content:flex-start}
+    .landing-shell{grid-template-columns:1fr;max-width:680px}
+    .landing-story{min-height:auto;padding:38px}
+    .landing-story h1{font-size:50px;margin-top:30px}
+    .landing-form{padding:38px}
+    .dashboard-grid{grid-template-columns:1fr}
+    .dashboard-side{display:grid;grid-template-columns:1fr 1fr}
+    .repfields{grid-template-columns:1fr 1fr}
+    .repfields input,.repfields input:first-child,.repfields input:nth-child(2){grid-column:span 1}
+  }
+  @media(max-width:650px){
+    .screen{padding:18px 14px 34px}
+    .landing-shell{border-radius:25px}
+    .landing-story{padding:28px 24px}
+    .landing-story h1{font-size:42px}
+    .landing-story .lead{font-size:15px}
+    .feature-strip{grid-template-columns:1fr;margin-top:26px}
+    .feature-chip{display:flex;align-items:center;gap:8px}
+    .feature-chip span{margin:0}
+    .landing-form{padding:28px 24px}
+    .appbar{align-items:flex-start}
+    .appbar .brand-copy{display:none}
+    .dashboard-hero{display:block}
+    .progress-pill{margin-top:16px}
+    .dashboard-grid{display:block}
+    .dashboard-main,.dashboard-side{gap:13px}
+    .dashboard-side{display:flex;margin-top:13px}
+    .cards{grid-template-columns:1fr;padding:10px 13px 16px}
+    .card{min-height:112px;display:grid;grid-template-columns:48px 1fr;align-items:center}
+    .card .done{right:13px;top:13px}
+    .official-launch{padding:20px;gap:14px}
+    .official-launch .ic{width:52px;height:52px}
+    .official-launch strong{font-size:19px}
+    .quick-grid{grid-template-columns:1fr 1fr}
+    .repfields{grid-template-columns:1fr}
+    .report-actions{display:block}
+    .report-actions .row{justify-content:center}
+    #repSel{width:100%;margin-bottom:8px!important}
+    .official-steps{border-radius:14px}
+    .official-step{font-size:10px;padding:7px 8px}
+    .official-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .official-word{font-size:14px;padding:7px 5px}
+  }
+  @media print{
+    body::before{display:none}
+    #s-report{background:#fff}
+    .report-toolbar{display:none!important}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
   }
 </style>
 </head>
@@ -219,69 +618,162 @@
 
   <!-- INTRO -->
   <section class="screen active" id="s-intro">
-    <div class="badge-big">🗺️</div>
-    <h1>Exploradores das Palavras</h1>
-    <p class="sub">Treine sua leitura desbravando aventuras! Leia em voz alta e descubra cada palavra antes do tempo acabar.</p>
-    <input class="name-in" id="nameIn" placeholder="Seu nome de explorador(a)" maxlength="16">
-    <div class="avatars" id="avatars"></div>
-    <div class="sub" style="margin:2px 0">Em que ano você está?</div>
-    <div class="years" id="years"></div>
-    <button class="btn" id="goPlay">🧭 Começar a Explorar</button>
+    <div class="landing-shell">
+      <div class="landing-story">
+        <div>
+          <div class="brand-lockup">
+            <div class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M12 16.5C19.5 13.5 25.8 13.5 32 18v31c-6.2-4.5-12.5-4.5-20-1.5v-31Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+                <path d="M52 16.5C44.5 13.5 38.2 13.5 32 18v31c6.2-4.5 12.5-4.5 20-1.5v-31Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+                <circle cx="43" cy="27" r="8" stroke="currentColor" stroke-width="4"/>
+                <path d="m49 33 7 7" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="brand-copy"><strong>Agência de Detetives Literários</strong><small>Leitura, pistas e descobertas</small></div>
+          </div>
+          <h1>Cada palavra<br>esconde uma <span>pista.</span></h1>
+          <p class="lead">Uma experiência de leitura em voz alta com missões, acompanhamento pedagógico e uma avaliação completa de fluência.</p>
+        </div>
+        <div class="feature-strip">
+          <div class="feature-chip"><b>3 tarefas</b><span>Avaliação estruturada</span></div>
+          <div class="feature-chip"><b>Correção revisada</b><span>Controle do aplicador</span></div>
+          <div class="feature-chip"><b>Relatório claro</b><span>Apoio pedagógico</span></div>
+        </div>
+      </div>
+      <div class="landing-form">
+        <span class="eyebrow">Novo caso</span>
+        <h2>Identifique o agente</h2>
+        <p class="form-lead">Preencha os dados abaixo para acessar o painel de investigação.</p>
+        <label class="field-label" for="nameIn">Nome do aluno</label>
+        <input class="name-in" id="nameIn" placeholder="Digite o primeiro nome" maxlength="16" required aria-describedby="nameError">
+        <span class="field-error" id="nameError" aria-live="polite"></span>
+        <span class="field-label">Escolha um distintivo</span>
+        <div class="avatars" id="avatars"></div>
+        <span class="field-label">Ano escolar</span>
+        <div class="years" id="years"></div>
+        <button class="btn" id="goPlay">Abrir painel da agência →</button>
+      </div>
+    </div>
   </section>
 
   <!-- MAP -->
   <section class="screen" id="s-map">
-    <div class="hud">
-      <span id="hudAv">🧭</span>
-      <div><div class="who" id="hudName">Explorador(a)</div><div class="rank" id="hudRank">Aprendiz</div></div>
-      <span class="spacer"></span>
-      <span class="stars">⭐ <span id="hudStars">0</span></span>
+    <div class="dashboard-shell">
+      <div class="appbar">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none">
+              <path d="M12 16.5C19.5 13.5 25.8 13.5 32 18v31c-6.2-4.5-12.5-4.5-20-1.5v-31Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+              <path d="M52 16.5C44.5 13.5 38.2 13.5 32 18v31c6.2-4.5 12.5-4.5 20-1.5v-31Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+              <circle cx="43" cy="27" r="8" stroke="currentColor" stroke-width="4"/>
+              <path d="m49 33 7 7" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="brand-copy"><strong>Agência Literária</strong><small>Painel de investigação</small></div>
+        </div>
+        <div class="hud">
+          <span id="hudAv">🧭</span>
+          <div><div class="who" id="hudName">Agente</div><div class="rank" id="hudRank">Em treinamento</div></div>
+          <span class="spacer"></span>
+          <span class="stars">★ <span id="hudStars">0</span></span>
+        </div>
+      </div>
+      <div class="xpbar"><div class="xpfill" id="xpFill"></div></div>
+      <div class="dashboard-hero">
+        <div>
+          <span class="eyebrow">Central de casos</span>
+          <h1>Painel do agente</h1>
+          <p>A avaliação completa produz o perfil de referência. As missões servem para praticar leitura com liberdade e confiança.</p>
+        </div>
+        <div class="progress-pill">
+          <span class="progress-icon">◎</span>
+          <span><b>Progresso da agência</b><small>Missões e avaliações salvas</small></span>
+        </div>
+      </div>
+      <div class="dashboard-grid">
+        <main class="dashboard-main">
+          <button class="official-launch" id="startOfficial">
+            <span class="ic">⌕</span><span><strong>Avaliação completa de fluência</strong>
+            <small>Três tarefas cronometradas, revisão do aplicador, compreensão e um único resultado consolidado.</small>
+            <span class="launch-meta"><em>80 palavras</em><em>60 itens</em><em>texto autoral</em><em>relatório</em></span></span>
+          </button>
+          <section class="panel">
+            <div class="panel-head"><div><h2>Treinos de investigação</h2><span>Práticas lúdicas que não geram classificação</span></div></div>
+            <div class="section-label">Escolha uma missão</div>
+            <div class="cards" id="missionCards"></div>
+          </section>
+        </main>
+        <aside class="dashboard-side">
+          <section class="panel quick-panel">
+            <h2>Arquivo pedagógico</h2>
+            <p>Consulte os registros produzidos durante as aplicações e treinos.</p>
+            <div class="quick-grid">
+              <button class="btn ghost" id="openHist"><b>Histórico</b><small>Todos os registros</small></button>
+              <button class="btn ghost" id="openBoard"><b>Placar</b><small>Melhores PCPM</small></button>
+              <button class="btn ghost" id="openReport"><b>Relatório</b><small>Documento individual</small></button>
+              <button class="btn ghost" id="openSet"><b>Ajustes</b><small>Acessibilidade</small></button>
+            </div>
+          </section>
+          <section class="panel quick-panel">
+            <h2>Gerenciar sessão</h2>
+            <p>Altere o aluno atual ou reinicie o progresso.</p>
+            <div class="student-actions" style="display:flex; flex-direction:column; gap:6px">
+              <div style="display:flex; gap:6px; width:100%">
+                <button class="btn pink" id="switchStudent" style="flex:1; margin:0">Trocar aluno</button>
+                <button class="btn ghost" id="resetGame" style="flex:1; margin:0">Reiniciar</button>
+              </div>
+              <button class="btn ghost" id="testMicMapBtn" style="width:100%; margin:0; border-color:var(--teal); color:var(--teal)">🎤 Testar Microfone</button>
+            </div>
+          </section>
+        </aside>
+      </div>
     </div>
-    <div class="xpbar"><div class="xpfill" id="xpFill"></div></div>
-    <h1 style="font-size:24px">🗺️ Mapa das Aventuras</h1>
-    <p class="sub">Gincana 1 e 2: leia o máximo de palavras em 60s! Missão 3: a Prova de Campo com o texto secreto.</p>
-    <div class="cards" id="missionCards"></div>
-    <button class="btn pink" style="margin-top:14px" id="switchStudent">👤 Trocar aluno</button>
-    <div class="row" style="margin-top:8px">
-      <button class="btn ghost" id="openHist">📊 Histórico</button>
-      <button class="btn ghost" id="openBoard">🏆 Placar</button>
-      <button class="btn ghost" id="openReport">📄 Relatório</button>
-      <button class="btn ghost" id="openSet">⚙️ Ajustes</button>
-    </div>
-    <button class="btn ghost" style="margin-top:8px" id="resetGame">↺ Recomeçar do zero</button>
   </section>
 
   <!-- HISTÓRICO -->
   <section class="screen" id="s-hist">
     <div class="corner"><button class="btn ghost" id="histBack">⬅ Mapa</button></div>
-    <h1 style="font-size:24px">📊 Histórico da Turma</h1>
-    <p class="sub">Cada prova/gincana fica registrada aqui. Exporte em CSV para acompanhar os alunos.</p>
-    <div class="row"><button class="btn teal" id="csvBtn">⬇ Exportar CSV</button>
-      <button class="btn ghost" id="clearHist">🗑 Limpar</button></div>
-    <div id="histTable" class="tablewrap"></div>
+    <div class="page-shell">
+      <header class="page-header">
+        <span class="eyebrow">Arquivo da agência</span>
+        <h1>Histórico da turma</h1>
+        <p class="sub">Avaliações completas e treinos aparecem separados. Apenas a avaliação completa produz perfil de referência.</p>
+      </header>
+      <div class="row" style="justify-content:flex-start;margin-bottom:15px"><button class="btn teal" id="csvBtn">Exportar CSV</button>
+        <button class="btn ghost" id="clearHist">Limpar histórico</button></div>
+      <div id="histTable" class="tablewrap"></div>
+    </div>
   </section>
 
   <!-- RELATÓRIO -->
   <section class="screen" id="s-report">
     <div class="corner noprint"><button class="btn ghost" id="repBack">⬅ Mapa</button></div>
-    <div class="noprint" style="width:100%;max-width:860px">
-      <h1 style="font-size:24px">📄 Relatório do Aluno</h1>
-      <p class="sub">Preencha os dados da escola, selecione o aluno e gere o parecer formal para a coordenação pedagógica.</p>
-      <div class="repfields">
-        <input id="repEscola" placeholder="Nome da escola" maxlength="80">
-        <input id="repProf" placeholder="Professor(a) responsável" maxlength="60">
-        <input id="repTurma" placeholder="Turma / Sala" maxlength="30">
-        <input id="repCoord" placeholder="Coordenação / Pedagoga" maxlength="60">
-      </div>
-      <div class="row">
-        <select id="repSel" class="name-in" style="width:auto;min-width:220px;margin:4px"></select>
-        <button class="btn teal" id="repPrint">🖨 Imprimir / PDF</button>
-        <button class="btn ghost" id="repCsv">⬇ CSV do aluno</button>
-        <button class="btn ghost" id="repShare">✉️ Enviar</button>
-      </div>
-      <div class="row">
-        <button class="btn pink" id="repPrintAll">🖨 Baixar TODOS os relatórios (PDF)</button>
-        <button class="btn ghost" id="repCsvAll">⬇ CSV da turma toda</button>
+    <div class="noprint">
+      <header class="page-header">
+        <span class="eyebrow">Documento pedagógico</span>
+        <h1>Relatório do aluno</h1>
+        <p class="sub">Complete a identificação institucional, selecione o estudante e gere um documento pronto para impressão ou PDF.</p>
+      </header>
+      <div class="report-toolbar">
+        <div class="repfields">
+          <input id="repEscola" placeholder="Nome da escola" maxlength="80" required aria-label="Nome da escola">
+          <input id="repLocal" placeholder="Município / UF" maxlength="60" required aria-label="Município e UF">
+          <input id="repProf" placeholder="Professor(a) responsável" maxlength="60" required aria-label="Professor responsável">
+          <input id="repTurma" placeholder="Turma / Sala" maxlength="30" required aria-label="Turma ou sala">
+          <input id="repCoord" placeholder="Coordenação / Pedagoga" maxlength="60" aria-label="Coordenação ou pedagoga">
+        </div>
+        <span class="field-error" id="reportError" aria-live="polite"></span>
+        <div class="report-actions">
+          <select id="repSel" class="name-in"></select>
+          <div class="row">
+            <button class="btn teal" id="repPrint">Imprimir / PDF</button>
+            <button class="btn ghost" id="repCsv">CSV do aluno</button>
+            <button class="btn ghost" id="repShare">Enviar</button>
+            <button class="btn pink" id="repPrintAll">PDF da turma</button>
+            <button class="btn ghost" id="repCsvAll">CSV da turma</button>
+          </div>
+        </div>
       </div>
     </div>
     <div id="repBody" style="width:100%;display:flex;flex-direction:column;align-items:center"></div>
@@ -290,9 +782,23 @@
   <!-- PLACAR -->
   <section class="screen" id="s-board">
     <div class="corner"><button class="btn ghost" id="boardBack">⬅ Mapa</button></div>
-    <h1 style="font-size:24px">🏆 Placar — Melhores PCPM</h1>
-    <p class="sub">Ranking pelo melhor PCPM de cada explorador(a).</p>
-    <div id="boardList" class="cards"></div>
+    <div class="page-shell">
+      <header class="page-header">
+        <span class="eyebrow">Desempenho</span>
+        <h1>Placar de leitura</h1>
+        <p class="sub">Ranking pelo melhor resultado de palavras corretas por minuto em avaliações completas.</p>
+      </header>
+      <div id="boardList" class="cards"></div>
+    </div>
+  </section>
+
+  <!-- AVALIAÇÃO COMPLETA -->
+  <section class="screen" id="s-official">
+    <div class="corner"><button class="btn ghost" id="officialBack">⬅ Mapa</button></div>
+    <div class="official-panel">
+      <div class="official-steps" id="officialSteps"></div>
+      <div id="officialBody" style="width:100%;display:flex;flex-direction:column;align-items:center"></div>
+    </div>
   </section>
 
   <!-- PLAY -->
@@ -313,7 +819,10 @@
     <div class="voicebar" id="voicebar">
       <span class="mic" id="micIco">🎙️</span>
       <span class="heard" id="heard">Toque em "Falar" e leia em voz alta — ou toque nas palavras.</span>
-      <button class="btn ghost" id="micBtn">🎙️ Falar</button>
+      <div style="display:flex; gap:6px">
+        <button class="btn ghost" id="micBtn" style="margin:0">🎙️ Falar</button>
+        <button class="btn ghost" id="testMicPlayBtn" style="margin:0; border-color:var(--teal); color:var(--teal)">🎤 Testar Mic</button>
+      </div>
     </div>
     <div class="progress-wrap">
       <div class="pbar"><div class="pfill" id="pFill"></div></div>
@@ -416,35 +925,99 @@ const TEXT_BANK=[
   }
 ];
 
+// Instrumento pedagógico autoral inspirado na estrutura pública de avaliações de fluência.
+// As listas, o texto e as questões abaixo foram produzidos especificamente para este projeto.
+const OFFICIAL_DURATION=60;
+const OFFICIAL_WORDS=[
+  "sol","casa","bola","mesa","pato","gato","dedo","mapa","livro","escola",
+  "janela","menino","menina","sapato","panela","banana","boneca","camisa","cavalo","pipoca",
+  "chave","chuva","folha","ninho","milho","telhado","jardim","coelho","queijo","peixe",
+  "praia","braço","flor","grama","fruta","bloco","trem","prato","estrela","cravo",
+  "amigo","família","cidade","sorriso","trabalho","domingo","caderno","mochila","tesoura","desenho",
+  "história","segredo","floresta","planeta","biblioteca","palavra","aventura","coragem","surpresa","relógio",
+  "pássaro","árvore","lâmpada","ônibus","música","açúcar","xícara","coração","fósforo","máquina",
+  "médico","brinquedo","travesseiro","borboleta","fotografia","computador","chocolate","bicicleta","descoberta","investigador"
+];
+const OFFICIAL_UNKNOWN=[
+  "mavelo","tupira","fenaco","jolume","baripo","clenato","vurela","ponida","grefe","daluco",
+  "ximara","sovito","branelo","quifeno","zupala","dravico","nelume","fosira","plunato","carevo",
+  "bregui","lumepa","trofina","valeco","jiruma","quessal","prenito","zolena","fradume","bitala",
+  "clovena","nupiro","garrume","telavo","bronico","xelura","dafino","vopela","crisato","juremi",
+  "flaneco","pobira","grunelo","chadiva","limoro","trasume","bequira","zofano","prileto","dunavi",
+  "calume","frevito","guinara","lesapo","motrila","quivaro","rufena","siblume","tefaro","vianeco"
+];
+const OFFICIAL_TEXT=`Na segunda-feira, a biblioteca da escola recebeu uma caixa sem remetente. Dentro dela havia um livro azul, uma lupa de papel e um bilhete: “Encontrem a história que perdeu o final.” Sofia chamou Ravi e os dois começaram a investigação. Primeiro, observaram a capa. Depois, procuraram pistas entre as páginas. Na página vinte, descobriram uma folha dobrada com o desenho de uma ponte, três estrelas e uma seta apontando para o pátio.
+No recreio, os amigos seguiram o mapa. Perto da jabuticabeira, encontraram outra mensagem escondida sob uma pedra. Ela dizia que o final estava onde as palavras descansavam. Ravi pensou na estante de devoluções. Sofia correu até lá e achou um envelope dentro de um dicionário antigo.
+O envelope guardava a última página do livro. A turma reuniu as partes, leu a história completa e registrou a descoberta no diário da biblioteca. No fim, todos perceberam que investigar também era uma forma divertida de ler com atenção.`;
+const OFFICIAL_QUESTIONS=[
+  {q:"O que chegou à biblioteca sem identificação do remetente?",opts:["Uma caixa","Uma mochila","Uma carta","Não respondeu"],a:0},
+  {q:"Onde Sofia encontrou o envelope com a última página?",opts:["Dentro de um dicionário antigo","Debaixo da ponte","Na caixa de devoluções","Não respondeu"],a:0},
+  {q:"Qual é a ideia principal do texto?",opts:["Duas crianças resolvem um mistério por meio da leitura","A turma organiza uma festa na biblioteca","Ravi perde um livro durante o recreio","Não respondeu"],a:0}
+];
+const OFFICIAL_TASKS=[
+  {key:"words",title:"Tarefa 1 — Leitura de palavras",hint:"Leia da esquerda para a direita, linha por linha.",items:OFFICIAL_WORDS},
+  {key:"unknown",title:"Tarefa 2 — Itens de decodificação",hint:"Leia da esquerda para a direita. Os itens são inventados e não exigem conhecimento de significado.",items:OFFICIAL_UNKNOWN},
+  {key:"text",title:"Tarefa 3 — Leitura de texto",hint:"Leia o texto em voz alta até o tempo terminar.",text:OFFICIAL_TEXT}
+];
+
 const MISSIONS = [
-  {id:0, ic:"🔦", title:"Trilha das Palavras", hint:"Leia a palavra! A próxima aparece sozinha. Quantas em 60s?",
-   sub:"Aventura de palavras · 60s", bank:"words", flash:true, timed:true, narr:false,
-   reveal:"Olho de explorador(a) afiado! Você reconhece cada palavra num piscar de olhos. 🔎"},
-  {id:1, ic:"🔐", title:"Trilha dos Códigos", hint:"Decifre o código! Outro pula na hora. Vai fundo!",
-   sub:"Aventura de códigos secretos · 60s", bank:"pseudo", flash:true, timed:true, narr:false,
-   reveal:"Códigos decifrados em alta velocidade! Explorador(a) nato(a). 🗝️"},
-  {id:2, ic:"⏱️", title:"A Grande Expedição", hint:"Leia o texto o mais longe que conseguir em 60 segundos!",
-   sub:"Texto secreto sorteado · cronometrado", bank:"text", numbered:false, timed:true, narr:true,
-   reveal:"EXPEDIÇÃO CONCLUÍDA! 🎉 Aventura desvendada com sucesso, explorador(a)!"}
+  {id:0, ic:"⌁", title:"Radar de Palavras", hint:"Leia a palavra! A próxima aparece sozinha.",
+   sub:"Reconhecimento rápido · tempo ajustável", bank:"words", flash:true, timed:true, narr:false,
+   reveal:"Radar calibrado! Você reconheceu as palavras com atenção e agilidade."},
+  {id:1, ic:"⌘", title:"Código Impossível", hint:"Decifre o código! Outro aparece logo em seguida.",
+   sub:"Itens inventados · treino de decodificação", bank:"pseudo", flash:true, timed:true, narr:false,
+   reveal:"Código decifrado! Sua leitura encontrou padrões até nas palavras inventadas."},
+  {id:2, ic:"◷", title:"Caso em Voz Alta", hint:"Leia o texto o mais longe que conseguir.",
+   sub:"Texto investigativo · tempo ajustável", bank:"text", numbered:false, timed:true, narr:true,
+   reveal:"Caso concluído! As pistas do texto foram investigadas em voz alta."}
 ];
 
 const AVATARS=["🧭","🦸","🐱","🐶","🦊","🐼","🐲","🤖","👽","🦁","🐯","🦉"];
 const YEARS=["2º ano","3º ano","4º ano","5º ano"];
-// metas por ano: piso fluente 65 universal; "ótimo" alvo da série
+// Metas internas de treino por ano; não são metas oficiais da avaliação externa.
 const META={"2º ano":{otimo:80}, "3º ano":{otimo:90}, "4º ano":{otimo:100}, "5º ano":{otimo:110}};
-const RANKS=[{min:0,name:"Aprendiz 🔰"},{min:5,name:"Explorador(a) Júnior 🥉"},{min:15,name:"Explorador(a) 🥈"},
-  {min:30,name:"Explorador(a) Sênior 🥇"},{min:50,name:"Mestre Explorador(a) 👑"}];
+const FLUENCY_GUIDE_URL="https://sedu.es.gov.br/Media/sedu/pdf%20e%20Arquivos/%5BFlu%C3%AAncia%202025%5D%20GUIA%20PR%C3%81TICO%20DE%20AN%C3%81LISE%20DE%20RESULTADOS.pdf";
+const RANKS=[{min:0,name:"Agente em treinamento"},{min:5,name:"Investigador Júnior"},{min:15,name:"Agente de campo"},
+  {min:30,name:"Investigador Sênior"},{min:50,name:"Chefe da Agência"}];
 
 // ============ ESTADO ============
 const SAVE="adl_save_v2";
 let state=loadState();
-function loadState(){let s={};try{s=JSON.parse(localStorage.getItem(SAVE))||{};}catch(e){}
-  return Object.assign({name:"",avatar:"🧭",ano:"2º ano",stars:0,done:[false,false,false],bestPcpm:0,
-    history:[],settings:{font:"normal",contrast:false},
-    inst:{escola:"",prof:"",turma:"",coord:""}},s);}
-function save(){localStorage.setItem(SAVE,JSON.stringify(state));}
+function loadState(){
+  let saved={};
+  try{saved=JSON.parse(localStorage.getItem(SAVE))||{};}catch(e){}
+  if(!saved||typeof saved!=="object"||Array.isArray(saved))saved={};
+  const defaults={name:"",avatar:"🧭",ano:"2º ano",stars:0,done:[false,false,false],bestPcpm:0,
+    history:[],assessments:[],settings:{font:"normal",big:false,dys:false,contrast:false},
+    inst:{escola:"",local:"",prof:"",turma:"",coord:""}};
+  const loaded=Object.assign({},defaults,saved);
+  loaded.settings=Object.assign({},defaults.settings,saved.settings&&typeof saved.settings==="object"?saved.settings:{});
+  loaded.inst=Object.assign({},defaults.inst,saved.inst&&typeof saved.inst==="object"?saved.inst:{});
+  loaded.history=Array.isArray(saved.history)?saved.history.filter(r=>r&&typeof r==="object"):[];
+  loaded.assessments=Array.isArray(saved.assessments)?saved.assessments.filter(r=>r&&typeof r==="object"):[];
+  loaded.done=Array.isArray(saved.done)?defaults.done.map((_,i)=>!!saved.done[i]):defaults.done.slice();
+  loaded.stars=Number.isFinite(Number(saved.stars))?Math.max(0,Number(saved.stars)):0;
+  loaded.bestPcpm=Number.isFinite(Number(saved.bestPcpm))?Math.max(0,Number(saved.bestPcpm)):0;
+  if(!YEARS.includes(loaded.ano))loaded.ano=defaults.ano;
+  if(!AVATARS.includes(loaded.avatar))loaded.avatar=defaults.avatar;
+  loaded.name=String(loaded.name||"").slice(0,16);
+  return loaded;
+}
+function save(){
+  try{localStorage.setItem(SAVE,JSON.stringify(state));return true;}
+  catch(e){toast("Não foi possível salvar neste navegador.");return false;}
+}
 const $=s=>document.querySelector(s);
-const show=id=>{document.querySelectorAll(".screen").forEach(e=>e.classList.remove("active"));$(id).classList.add("active");};
+const show=id=>{const target=$(id);if(!target)return;document.querySelectorAll(".screen").forEach(e=>e.classList.remove("active"));target.classList.add("active");};
+function cleanText(value){return String(value||"").trim().replace(/\s+/g," ");}
+function markInvalid(el,message,target){
+  if(el)el.classList.add("is-invalid");
+  if(target)target.textContent=message||"";
+}
+function clearInvalid(el,target){
+  if(el)el.classList.remove("is-invalid");
+  if(target)target.textContent="";
+}
 
 // ============ TEXTO / FUZZY (porta do jogo da bomba) ============
 const norm=t=>t.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
@@ -471,61 +1044,491 @@ function beep(f,d=0.08,type="sine",v=0.18){try{if(!actx)actx=new(window.AudioCon
 function popSound(c){beep(420+Math.min(c,12)*42,0.09,"triangle",0.2);}
 function winSound(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,0.18,"square",0.18),i*120));}
 function tickSound(){beep(880,0.04,"square",0.08);}
+function setFuseProgress(el,ratio){
+  if(!el)return;
+  const safe=Math.max(0,Math.min(1,Number(ratio)||0));
+  el.style.setProperty("--fuse-width",(42*safe).toFixed(1)+"px");
+}
+function detonateTarget(target){
+  if(!target)return;
+  target.classList.remove("detonate");
+  void target.offsetWidth;
+  target.classList.add("detonate");
+  setTimeout(()=>target.classList.remove("detonate"),900);
+}
 
 // ============ INTRO ============
 function initIntro(){
   const av=$("#avatars");av.innerHTML="";
-  AVATARS.forEach(a=>{const d=document.createElement("div");d.className="av"+(a===state.avatar?" sel":"");d.textContent=a;
-    d.onclick=()=>{state.avatar=a;document.querySelectorAll(".av").forEach(x=>x.classList.remove("sel"));d.classList.add("sel");beep(600,0.05);};av.appendChild(d);});
+  AVATARS.forEach(a=>{const d=document.createElement("button");d.type="button";d.className="av"+(a===state.avatar?" sel":"");d.textContent=a;
+    d.setAttribute("aria-label","Escolher avatar "+a);d.setAttribute("aria-pressed",a===state.avatar?"true":"false");
+    d.onclick=()=>{state.avatar=a;document.querySelectorAll(".av").forEach(x=>{x.classList.remove("sel");x.setAttribute("aria-pressed","false");});
+      d.classList.add("sel");d.setAttribute("aria-pressed","true");beep(600,0.05);};av.appendChild(d);});
   const yr=$("#years");yr.innerHTML="";
-  YEARS.forEach(y=>{const d=document.createElement("div");d.className="yr"+(y===state.ano?" sel":"");d.textContent=y;
-    d.onclick=()=>{state.ano=y;document.querySelectorAll(".yr").forEach(x=>x.classList.remove("sel"));d.classList.add("sel");beep(700,0.05);};yr.appendChild(d);});
+  YEARS.forEach(y=>{const d=document.createElement("button");d.type="button";d.className="yr"+(y===state.ano?" sel":"");d.textContent=y;
+    d.setAttribute("aria-pressed",y===state.ano?"true":"false");
+    d.onclick=()=>{state.ano=y;document.querySelectorAll(".yr").forEach(x=>{x.classList.remove("sel");x.setAttribute("aria-pressed","false");});
+      d.classList.add("sel");d.setAttribute("aria-pressed","true");beep(700,0.05);};yr.appendChild(d);});
   $("#nameIn").value=state.name||"";
 }
-$("#goPlay").onclick=()=>{state.name=($("#nameIn").value||"Explorador(a)").trim();save();
-  if(!actx){try{actx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}openMap();};
+$("#nameIn").addEventListener("input",()=>clearInvalid($("#nameIn"),$("#nameError")));
+$("#goPlay").onclick=()=>{
+  const input=$("#nameIn"),err=$("#nameError"),entered=cleanText(input.value);
+  if(entered.length<2||!/\p{L}/u.test(entered)){
+    markInvalid(input,"Digite o nome do aluno antes de abrir o painel.",err);
+    input.focus();toast("Informe o nome do aluno.");return;
+  }
+  state.name=entered.slice(0,16);save();
+  if(!actx){try{actx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}openMap();
+};
 
 // ============ MAP ============
 function currentRank(){let r=RANKS[0];RANKS.forEach(x=>{if(state.stars>=x.min)r=x;});return r;}
 function openMap(){
-  stopRec();stopTimer();
-  $("#hudAv").textContent=state.avatar;$("#hudName").textContent=state.name||"Explorador(a)";
+  stopRec();stopTimer();stopOfficialSession();
+  $("#hudAv").textContent=state.avatar;$("#hudName").textContent=state.name||"Agente";
   $("#hudRank").textContent=currentRank().name;$("#hudStars").textContent=state.stars;
   const cur=currentRank(),next=RANKS[RANKS.indexOf(cur)+1];
   $("#xpFill").style.width=(next?Math.min(100,(state.stars-cur.min)/(next.min-cur.min)*100):100)+"%";
   const c=$("#missionCards");c.innerHTML="";
   MISSIONS.forEach((m,i)=>{
-    const d=document.createElement("div");d.className="card";
-    d.innerHTML=`<div class="ic">${m.ic}</div><div class="tt"><b>Missão ${i+1}: ${m.title}</b>
-      <small>${m.sub}</small></div><div class="done">${state.done[i]?"✅":"▶️"}</div>`;
+    const d=document.createElement("button");d.type="button";d.className="card";
+    d.innerHTML=`<div class="ic">${m.ic}</div><div class="tt"><b>${m.title}</b>
+      <small>Missão 0${i+1} · ${m.sub}</small></div><div class="done">${state.done[i]?"✓":"→"}</div>`;
     d.onclick=()=>startMission(i);c.appendChild(d);
   });
   show("#s-map");
 }
+$("#startOfficial").onclick=openOfficialIntro;
 $("#resetGame").onclick=()=>{if(confirm("Recomeçar do zero? Perde estrelas e progresso (histórico fica salvo).")){
   state=Object.assign({},state,{stars:0,done:[false,false,false],bestPcpm:0});save();openMap();}};
 
+// ===== AVALIAÇÃO COMPLETA — PROTOCOLO DE REFERÊNCIA 2º ANO =====
+let officialSession=null,officialTimer=null,officialRecorder=null,officialStream=null,officialChunks=[];
+function stopOfficialSession(){
+  if(officialTimer){clearInterval(officialTimer);officialTimer=null;}
+  if(officialRecorder&&officialRecorder.state!=="inactive"){try{officialRecorder.stop();}catch(e){}}
+  if(officialStream){officialStream.getTracks().forEach(t=>t.stop());officialStream=null;}
+  stopOfficialSpeechRecognition();
+}
+function renderOfficialSteps(active=-1){
+  const labels=["1. Palavras","2. Decodificação","3. Texto","4. Compreensão","5. Resultado"];
+  $("#officialSteps").innerHTML=labels.map((label,i)=>{
+    const done=officialSession&&(i<active||(i<3&&officialSession.results[i]));
+    return`<span class="official-step ${i===active?"active":done?"done":""}">${done?"✓ ":""}${label}</span>`;
+  }).join("");
+}
+function openOfficialIntro(){
+  stopRec();stopTimer();stopOfficialSession();officialSession=null;
+  renderOfficialSteps(-1);
+  $("#officialBody").innerHTML=`<div class="official-result" style="text-align:left">
+    <h1 style="font-size:28px">📋 Avaliação completa de fluência</h1>
+    <p><b>Instrumento pedagógico autoral:</b> destinado ao 2º ano do Ensino Fundamental e inspirado na estrutura pública de avaliações de fluência.</p>
+    <div class="official-note" style="color:#222;background:#eef4f8;border-color:#c5d4e2">
+      <b>Como funciona:</b><br>
+      1. Leitura de 80 palavras por 60 segundos.<br>
+      2. Leitura de 60 itens autorais de decodificação por 60 segundos.<br>
+      3. Leitura de texto por 60 segundos.<br>
+      4. Revisão dos acertos e erros e três perguntas de compreensão.<br><br>
+      O perfil é calculado <b>somente depois das três tarefas</b>. A tela mostra a lista/texto completo, como material de aplicação; as atividades de uma palavra por vez ficam apenas nos treinos. O microfone grava o áudio localmente quando permitido; a correção informada pelo aplicador é o dado usado no resultado.
+    </div>
+    <p><b>Aluno(a):</b> ${esc(state.name||"Agente")}</p>
+    <div class="row" style="gap:10px">
+      <button class="btn teal" id="officialBegin">Começar avaliação ▶</button>
+      <button class="btn ghost" id="officialTestMicBtn" style="border-color:var(--teal); color:var(--teal)">🎤 Testar Microfone</button>
+    </div>
+  </div>`;
+  show("#s-official");
+  $("#officialBegin").onclick=()=>{officialSession={startedAt:new Date().toISOString(),taskIndex:0,results:[],quiz:[],liveLast:0,audioUrls:[]};renderOfficialTask(0);};
+  $("#officialTestMicBtn").onclick=openMicTest;
+}
+function officialWords(task){
+  if(task.items)return`<div class="official-grid">${task.items.map((w,i)=>`<span class="official-word" data-n="${i+1}">${esc(w)}</span>`).join("")}</div>`;
+  const words=task.text.split(/\s+/);
+  return`<h2>O MISTÉRIO DA ÚLTIMA PÁGINA</h2><div class="official-text">${words.map((w,i)=>`<span class="ow" data-n="${i+1}">${esc(w)}</span> `).join("")}</div>`;
+}
+function renderOfficialTask(index){
+  stopOfficialSession();
+  const task=OFFICIAL_TASKS[index];officialSession.taskIndex=index;officialSession.liveLast=0;officialSession.running=false;
+  renderOfficialSteps(index);
+  $("#officialBody").innerHTML=`<div class="mission-head">
+      <div style="color:var(--gold);font-weight:bold">Avaliação completa · ${esc(state.name||"Agente")}</div>
+      <h2>${task.title}</h2><p>${task.hint}</p>
+    </div>
+    <div class="official-timer" id="officialTime">${OFFICIAL_DURATION}</div>
+    <div class="official-sheet" id="officialSheet">${officialWords(task)}</div>
+    <p class="sub" id="officialStatus">Ao terminar, marque a última palavra alcançada. A correção será revisada antes de salvar.</p>
+    <div class="controls">
+      <button class="btn teal" id="officialStart">▶ Iniciar 60 segundos</button>
+      <button class="btn pink" id="officialReview" style="display:none">Revisar e corrigir ▶</button>
+    </div>`;
+  const marks=$("#officialSheet").querySelectorAll("[data-n]");
+  $("#officialSheet").onclick=e=>{
+    const el=e.target.closest("[data-n]");if(!el||officialSession.running)return;
+    officialSession.liveLast=Number(el.dataset.n);
+    marks.forEach(x=>x.classList.toggle("reached",Number(x.dataset.n)<=officialSession.liveLast));
+    $("#officialStatus").textContent=`Última palavra marcada: ${officialSession.liveLast}. Agora clique em Revisar e corrigir.`;
+  };
+  setFuseProgress($("#officialTime"),1);
+  $("#officialStart").onclick=startOfficialClock;
+  $("#officialReview").onclick=showOfficialReview;
+}
+async function beginOfficialRecording(){
+  officialChunks=[];officialRecorder=null;officialStream=null;
+  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder)return false;
+  try{
+    officialStream=await navigator.mediaDevices.getUserMedia({audio:true});
+    officialRecorder=new MediaRecorder(officialStream);
+    officialRecorder.ondataavailable=e=>{if(e.data&&e.data.size)officialChunks.push(e.data);};
+    officialRecorder.start();return true;
+  }catch(e){return false;}
+}
+function endOfficialRecording(taskIndex){
+  return new Promise(resolve=>{
+    if(!officialRecorder||officialRecorder.state==="inactive"){if(officialStream)officialStream.getTracks().forEach(t=>t.stop());resolve(null);return;}
+    officialRecorder.onstop=()=>{
+      const blob=officialChunks.length?new Blob(officialChunks,{type:officialRecorder.mimeType||"audio/webm"}):null;
+      const url=blob?URL.createObjectURL(blob):null;
+      officialSession.audioUrls[taskIndex]=url;
+      if(officialStream)officialStream.getTracks().forEach(t=>t.stop());
+      officialStream=null;resolve(url);
+    };
+    try{officialRecorder.stop();}catch(e){resolve(null);}
+  });
+}
+let officialRec = null;
+let officialRecOn = false;
+function startOfficialSpeechRecognition(){
+  if(!voiceSupported())return;
+  stopOfficialSpeechRecognition();
+  const RecCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+  officialRec = new RecCtor();
+  officialRec.lang = "pt-BR";
+  officialRec.continuous = true;
+  officialRec.interimResults = true;
+  officialRec.maxAlternatives = 4;
+  let officialHeardTokens = [];
+  officialRecOn = true;
+  officialSession.voiceError = "";
+  const task = OFFICIAL_TASKS[officialSession.taskIndex];
+  const wordsList = task.items || task.text.split(/\s+/);
+  const totalWords = wordsList.length;
+  officialRec.onresult = e => {
+    if(!officialSession || !officialSession.running)return;
+    let interim = "", finals = [];
+    for(let i = e.resultIndex; i < e.results.length; i++){
+      const r = e.results[i];
+      const t = r[0]?.transcript || "";
+      if(r.isFinal)finals.push(t); else interim += " " + t;
+    }
+    if(finals.length){
+      finals.forEach(f => officialHeardTokens.push(...norm(f).split(/\s+/).filter(Boolean)));
+    }
+    const interimTokens = norm(interim).split(/\s+/).filter(Boolean);
+    const allTokens = officialHeardTokens.concat(interimTokens);
+    const aligned = alignOfficialTokens(allTokens, wordsList, totalWords);
+    if(aligned.p > officialSession.liveLast){
+      officialSession.liveLast = aligned.p;
+      const marks = $("#officialSheet").querySelectorAll("[data-n]");
+      marks.forEach(x => {
+        x.classList.toggle("reached", Number(x.dataset.n) <= officialSession.liveLast);
+      });
+      $("#officialStatus").textContent=`🎙️ Apoio do microfone marcou até ${officialSession.liveLast}. Confirme na revisão antes de salvar.`;
+    }
+  };
+  officialRec.onerror = ev => {
+    officialSession.voiceError = ev.error || "erro";
+    $("#officialStatus").textContent="O microfone não marcou a leitura automaticamente. Continue a aplicação e informe a última palavra na revisão.";
+  };
+  officialRec.onend = () => {
+    if(officialRecOn && officialSession && officialSession.running){
+      try{officialRec.start();}catch(e){}
+    }
+  };
+  try{
+    officialRec.start();
+  }catch(e){
+    officialRecOn = false;
+  }
+}
+function stopOfficialSpeechRecognition(){
+  officialRecOn = false;
+  if(officialRec){
+    try{
+      officialRec.onend = null;
+      officialRec.stop();
+    }catch(e){}
+    officialRec = null;
+  }
+}
+function alignOfficialTokens(tokens, wordsList, totalWords){
+  let p = 0, c = 0, guard = 0, skipped = [];
+  while(p < totalWords && c < tokens.length && guard < 2000){
+    guard++;
+    let jump = -1, used = 0;
+    for(let la = 0; la <= 12 && p + la < totalWords; la++){
+      const exp = wordsList[p + la];
+      for(let k = 0; k < 8 && c + k < tokens.length; k++){
+        if(wordMatches(exp, [tokens[c + k]])){jump = la; used = k + 1; break;}
+      }
+      if(jump >= 0)break;
+    }
+    if(jump >= 0){
+      for(let i = 0; i < jump; i++)skipped.push(p + i);
+      p += jump + 1; c += used;
+    } else {c++;}
+  }
+  return {p, skipped};
+}
+async function startOfficialClock(){
+  const btn=$("#officialStart");
+  btn.disabled=true;
+  $("#officialStatus").textContent="Preparando a gravação do áudio…";
+  const recording=await beginOfficialRecording();
+  officialSession.running=true;
+  officialSession.startedClock=performance.now();
+  officialSession.taskElapsed=OFFICIAL_DURATION;
+
+  // Transform key buttons for early stop option
+  btn.textContent="⏹️ Concluir Leitura";
+  btn.className="btn pink";
+  btn.disabled=false;
+  btn.onclick=()=>finishOfficialClock();
+
+  // Start Speech Recognition for official task 1 (words) and task 3 (text)
+  if(voiceSupported() && (officialSession.taskIndex === 0 || officialSession.taskIndex === 2)){
+    startOfficialSpeechRecognition();
+  }
+
+  $("#officialStatus").textContent=recording
+    ?"🎙️ Gravando localmente. Leia agora. Se o microfone não marcar, a revisão manual continua valendo."
+    :"Leia agora. A gravação não está disponível; faça a correção manual ao final.";
+  let previous=OFFICIAL_DURATION;
+  officialTimer=setInterval(()=>{
+    const elapsed=(performance.now()-officialSession.startedClock)/1000;
+    const left=Math.max(0,OFFICIAL_DURATION-elapsed),shown=Math.ceil(left);
+    $("#officialTime").textContent=shown;
+    setFuseProgress($("#officialTime"),left/OFFICIAL_DURATION);
+    $("#officialTime").classList.toggle("warn",shown<=10&&shown>0);
+    if(shown<=10&&shown!==previous&&shown>0)tickSound();
+    previous=shown;
+    if(left<=0)finishOfficialClock();
+  },100);
+}
+async function finishOfficialClock(){
+  if(!officialSession?.running)return;
+  officialSession.running=false;
+  if(officialTimer){clearInterval(officialTimer);officialTimer=null;}
+  stopOfficialSpeechRecognition();
+  const elapsed=Math.min(OFFICIAL_DURATION,(performance.now()-officialSession.startedClock)/1000)||OFFICIAL_DURATION;
+  officialSession.taskElapsed=elapsed;
+
+  $("#officialTime").textContent="0";setFuseProgress($("#officialTime"),0);
+  $("#officialTime").classList.remove("warn");$("#officialTime").classList.add("boom");detonateTarget($("#officialSheet"));
+  await endOfficialRecording(officialSession.taskIndex);
+
+  // Restore button text and hide it
+  const btn=$("#officialStart");
+  btn.style.display="none";
+  btn.textContent="▶ Iniciar 60 segundos";
+  btn.className="btn teal";
+  btn.disabled=false;
+  btn.onclick=startOfficialClock;
+
+  $("#officialReview").style.display="inline-block";
+  const manualMsg=officialSession.liveLast>0
+    ? `Última palavra marcada: ${officialSession.liveLast}. Confira e corrija os números na revisão.`
+    : "O microfone não marcou nenhuma palavra. Isso não significa que o aluno não leu: digite a última palavra lida na revisão.";
+  $("#officialStatus").textContent=(elapsed<59.5?`Leitura concluída em ${elapsed.toFixed(1)}s. `:"Tempo encerrado. ")+manualMsg;
+  beep(330,0.3,"square",0.15);
+}
+function officialAudioHtml(index){
+  const url=officialSession.audioUrls[index];
+  return url?`<div style="margin:10px 0"><b>Áudio gravado:</b><br><audio controls src="${url}" style="width:100%"></audio></div>`:
+    `<p style="color:#777">Sem áudio gravado. Use a observação do aplicador para corrigir.</p>`;
+}
+function reviewAssistHtml(last){
+  const ok=last>0;
+  return `<div class="review-alert ${ok?"ok":""}">
+    <b>${ok?"Marcação inicial encontrada":"Microfone sem marcação automática"}</b><br>
+    ${ok?`O sistema marcou inicialmente até a palavra ${last}. Confira com sua observação ou com o áudio antes de salvar.`
+      :"Digite manualmente a última palavra lida. Só deixe 0 se realmente não houve leitura ou tentativa."}
+  </div>
+  <label class="zero-confirm"><input type="checkbox" id="offZeroConfirm">
+    Confirmo que não houve leitura/tentativa nesta tarefa e que o valor 0 está correto.</label>
+  <p class="field-error" id="officialReviewError" aria-live="polite"></p>`;
+}
+function reviewNumber(id,label,min,max){
+  const el=$("#"+id),raw=cleanText(el?.value);
+  const n=Number(raw);
+  el?.classList.remove("is-invalid");
+  if(raw===""||!Number.isFinite(n)||!Number.isInteger(n)||n<min||n>max){
+    return{ok:false,el,message:`${label} deve ser um número inteiro de ${min} a ${max}.`};
+  }
+  return{ok:true,value:n,el};
+}
+function reviewError(message,el){
+  const err=$("#officialReviewError");
+  if(err)err.textContent=message;
+  if(el){el.classList.add("is-invalid");el.focus();}
+  toast(message);
+}
+function showOfficialReview(){
+  const index=officialSession.taskIndex,task=OFFICIAL_TASKS[index],max=task.items?.length||task.text.split(/\s+/).length;
+  renderOfficialSteps(index);
+  if(index<2){
+    const last=Math.min(max,officialSession.liveLast||0);
+    $("#officialBody").innerHTML=`<div class="review-form">
+      <h2>Revisão — ${task.title}</h2>${officialAudioHtml(index)}
+      ${reviewAssistHtml(last)}
+      <div class="review-row"><label for="offLast">Última palavra tentada</label><input id="offLast" type="number" inputmode="numeric" step="1" min="0" max="${max}" value="${last}" required></div>
+      <div class="review-row"><label for="offCorrect">Palavras lidas corretamente</label><input id="offCorrect" type="number" inputmode="numeric" step="1" min="0" max="${max}" value="${last}" required></div>
+      ${index===0?`<div class="review-row"><label for="offBehavior">Quando houve dificuldade, predominou</label>
+        <select id="offBehavior"><option value="">Selecione a observação predominante</option><option value="automatic">Leu palavras inteiras ou fez tentativas</option>
+        <option value="no_read">Não leu ou inventou letras/palavras</option><option value="spelled">Soletrou ou nomeou letras</option>
+        <option value="syllabified">Silabou sem dizer a palavra inteira</option></select></div>`:
+        `<p style="font-size:13px;color:#666">Os itens desta tarefa são inventados e pronunciáveis. Corrija a decodificação, sem exigir significado.</p>`}
+      <p style="font-size:13px;color:#666">Uma releitura correta após erro ou soletração conta como acerto, conforme o guia de correção.</p>
+      <div class="row"><button class="btn teal" id="saveOfficialReview">Salvar e continuar ▶</button></div></div>`;
+  }else{
+    const last=Math.min(max,officialSession.liveLast||0);
+    $("#officialBody").innerHTML=`<div class="review-form">
+      <h2>Revisão — leitura do texto</h2>${officialAudioHtml(index)}
+      ${reviewAssistHtml(last)}
+      <div class="review-row"><label for="offLast">Número da última palavra lida</label><input id="offLast" type="number" inputmode="numeric" step="1" min="0" max="${max}" value="${last}" required></div>
+      <div class="review-row"><label for="offErrors">Palavras lidas com erro</label><input id="offErrors" type="number" inputmode="numeric" step="1" min="0" max="${max}" value="0" required></div>
+      <div class="review-row"><label for="offProsody">Obedeceu às pausas de sentido?</label><select id="offProsody"><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+      <p style="font-size:13px;color:#666">Conte trocas, omissões, acréscimos, substituições, tonicidade incorreta, leitura silabada e soletração como erros.</p>
+      <div class="row"><button class="btn teal" id="saveOfficialReview">Salvar e responder compreensão ▶</button></div></div>`;
+  }
+  $("#saveOfficialReview").onclick=saveOfficialReview;
+}
+function saveOfficialReview(){
+  const index=officialSession.taskIndex,task=OFFICIAL_TASKS[index],max=task.items?.length||task.text.split(/\s+/).length;
+  $("#officialReviewError").textContent="";
+  const lastCheck=reviewNumber("offLast","Última palavra",0,max);
+  if(!lastCheck.ok){reviewError(lastCheck.message,lastCheck.el);return;}
+  const last=lastCheck.value,zeroConfirmed=!!$("#offZeroConfirm")?.checked;
+  if(last===0&&!zeroConfirmed){
+    reviewError("A última palavra está 0. Digite a última palavra lida ou marque a confirmação de que não houve leitura.",$("#offLast"));return;
+  }
+  const elapsed=officialSession.taskElapsed||60;
+  if(index<2){
+    const correctCheck=reviewNumber("offCorrect","Palavras corretas",0,max);
+    if(!correctCheck.ok){reviewError(correctCheck.message,correctCheck.el);return;}
+    const correct=correctCheck.value;
+    if(correct>last){reviewError("As palavras corretas não podem ser maiores que a última palavra tentada.",$("#offCorrect"));return;}
+    let behavior=index===0?$("#offBehavior").value:"automatic";
+    if(index===0&&last===0&&zeroConfirmed&&!behavior)behavior="no_read";
+    if(index===0&&!behavior){reviewError("Selecione a observação predominante da leitura.",$("#offBehavior"));return;}
+    officialSession.results[index]={key:task.key,last,correct,errors:last-correct,behavior,elapsed};
+    renderOfficialTask(index+1);
+  }else{
+    const errorCheck=reviewNumber("offErrors","Palavras com erro",0,max);
+    if(!errorCheck.ok){reviewError(errorCheck.message,errorCheck.el);return;}
+    const errors=errorCheck.value;
+    if(errors>last){reviewError("Os erros não podem ser maiores que a quantidade lida.",$("#offErrors"));return;}
+    officialSession.results[index]={key:task.key,last,correct:last-errors,errors,precision:last?Math.round((last-errors)/last*100):0,prosody:$("#offProsody").value,elapsed};
+    showOfficialComprehension(0);
+  }
+}
+function showOfficialComprehension(index){
+  renderOfficialSteps(3);
+  if(index>=OFFICIAL_QUESTIONS.length){finishOfficialAssessment();return;}
+  const item=OFFICIAL_QUESTIONS[index];
+  $("#officialBody").innerHTML=`<div class="review-form"><h2>Compreensão ${index+1} de ${OFFICIAL_QUESTIONS.length}</h2>
+    <p style="font-size:20px;text-align:center">${item.q}</p><div class="qopts" id="officialOpts"></div></div>`;
+  const box=$("#officialOpts");
+  item.opts.forEach((text,i)=>{
+    const b=document.createElement("button");b.className="btn ghost qopt";b.textContent=text;
+    b.onclick=()=>{officialSession.quiz.push(i===item.a);showOfficialComprehension(index+1);};box.appendChild(b);
+  });
+}
+function classifyOfficialResults(words,unknown,text){
+  if(text.correct>65&&text.precision>=90)return{profile:"Leitor Fluente",preLevel:null,color:"#2faf50"};
+  if(words.correct>=11&&unknown.correct>=6)return{profile:"Leitor Iniciante",preLevel:null,color:"#d99a16"};
+  let level=4;
+  if(words.behavior==="no_read"||(!words.correct&&!words.last))level=1;
+  else if(words.behavior==="spelled")level=2;
+  else if(words.behavior==="syllabified")level=3;
+  return{profile:"Pré-leitor",preLevel:level,color:"#e0524a"};
+}
+function calculateOfficialProfile(){
+  return classifyOfficialResults(officialSession.results[0],officialSession.results[1],officialSession.results[2]);
+}
+function officialRecommendation(profile,level){
+  if(profile==="Leitor Fluente")return"Manter leitura frequente, ampliar gêneros, vocabulário, prosódia e compreensão.";
+  if(profile==="Leitor Iniciante")return"Priorizar automatização da decodificação, releitura orientada, palavras frequentes e textos curtos.";
+  if(level===1)return"Fortalecer reconhecimento de letras, consciência fonológica e correspondência entre sons e grafemas.";
+  if(level===2)return"Avançar da nomeação de letras para a combinação de sílabas e leitura de palavras completas.";
+  if(level===3)return"Trabalhar a passagem da leitura silabada para o reconhecimento da palavra inteira.";
+  return"Consolidar a leitura de palavras e ampliar gradualmente velocidade e precisão.";
+}
+function finishOfficialAssessment(){
+  const result=calculateOfficialProfile(),words=officialSession.results[0],unknown=officialSession.results[1],text=officialSession.results[2];
+  const quizCorrect=officialSession.quiz.filter(Boolean).length;
+  // piso de tempo evita PCPM absurdo se a leitura for concluída muito cedo; teto sanitário em 250
+  const textElapsed=Math.max(5,text.elapsed||60);
+  const pcpm=Math.min(250,textElapsed<59.5?Math.round(text.correct/textElapsed*60):text.correct);
+  const assessment={tipo:"avaliacao_completa",data:new Date().toISOString(),nome:state.name||"Agente",avatar:state.avatar,ano:"2º ano",
+    perfil:result.profile,nivelPre:result.preLevel,palavrasCorretas:words.correct,desconhecidasCorretas:unknown.correct,
+    textoLidas:text.last,textoCorretas:text.correct,textoErros:text.errors,prec:text.precision,prosodia:text.prosody,
+    quiz:`${quizCorrect}/${OFFICIAL_QUESTIONS.length}`};
+  state.assessments.push(assessment);
+  state.history.push({tipo:"avaliacao_completa",nome:assessment.nome,avatar:assessment.avatar,ano:assessment.ano,data:assessment.data,
+    missao:"Avaliação completa (3 tarefas)",pcpm:pcpm,perfil:assessment.perfil,lidas:text.correct,erros:text.errors,
+    prec:text.precision,seg:Math.round(textElapsed),quiz:assessment.quiz});
+  save();renderOfficialSteps(4);winSound();confetti();
+  $("#officialBody").innerHTML=`<div class="official-result" style="text-align:center">
+    <h1 style="font-size:28px">Resultado da avaliação completa</h1>
+    <div class="profile" style="background:${result.color}">${result.profile}${result.preLevel?` · Nível ${result.preLevel}`:""}</div>
+    <div class="official-metrics">
+      <div class="official-metric"><b>${words.correct}/80</b>palavras corretas</div>
+      <div class="official-metric"><b>${unknown.correct}/60</b>itens de decodificação</div>
+      <div class="official-metric"><b>${text.correct}</b>palavras corretas no texto</div>
+      <div class="official-metric"><b>${pcpm}</b>velocidade (PCPM)</div>
+      <div class="official-metric"><b>${text.precision}%</b>precisão no texto</div>
+      <div class="official-metric"><b>${text.prosody==="sim"?"Sim":"Não"}</b>pausas de sentido</div>
+      <div class="official-metric"><b>${assessment.quiz}</b>compreensão</div>
+    </div>
+    <p>${officialRecommendation(result.profile,result.preLevel)}</p>
+    <p style="font-size:13px;color:#666">Perfil calculado a partir do conjunto das três tarefas. A revisão do áudio pelo aplicador continua sendo essencial.</p>
+    <div class="row"><button class="btn teal" id="officialDone">Concluir e voltar ao mapa</button>
+    <button class="btn ghost" id="officialReport">Abrir relatório</button></div></div>`;
+  $("#officialDone").onclick=openMap;$("#officialReport").onclick=openReport;
+}
+$("#officialBack").onclick=()=>{if(officialSession?.running&&!confirm("A avaliação está em andamento. Deseja sair e perder esta aplicação?"))return;openMap();};
+
 // ===== HISTÓRICO + CSV =====
-function fmtDate(iso){const d=new Date(iso);return d.toLocaleDateString("pt-BR")+" "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});}
-function pfClass(p){return p.indexOf("Fluente")>=0?"pf-Fluente":p.indexOf("Iniciante")>=0?"pf-Iniciante":"pf-Preleitor";}
+function fmtDate(iso){const d=new Date(iso);if(Number.isNaN(d.getTime()))return"Data inválida";
+  return d.toLocaleDateString("pt-BR")+" "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});}
+function normalizedProfile(p){
+  const key=compact(String(p||""));
+  if(key.includes("treino"))return"Treino — sem perfil";
+  if(key.includes("fluente"))return"Leitor Fluente";
+  if(key.includes("iniciante"))return"Leitor Iniciante";
+  return"Pré-leitor";
+}
+function pfClass(p){p=normalizedProfile(p);return p.includes("Fluente")?"pf-Fluente":p.includes("Iniciante")?"pf-Iniciante":p.includes("Treino")?"":"pf-Preleitor";}
+function historyProfile(r){return r.tipo==="avaliacao_completa"?normalizedProfile(r.perfil):"Sem classificação";}
 function openHist(){
   stopRec();stopTimer();
   const h=state.history;const t=$("#histTable");
   if(!h.length){t.innerHTML='<p class="sub">Nenhum registro ainda. Faça uma prova!</p>';}
   else{
-    let rows=h.slice().reverse().map(r=>`<tr><td>${fmtDate(r.data)}</td><td>${r.avatar} ${r.nome}</td><td>${r.ano}</td>
-      <td>${r.missao}</td><td><b>${r.pcpm}</b></td><td class="${pfClass(r.perfil)}">${r.perfil}</td>
-      <td>${r.lidas}</td><td>${r.erros}</td><td>${typeof r.prec==="number"?r.prec+"%":"—"}</td><td>${r.seg}s</td><td>${r.quiz}</td></tr>`).join("");
-    t.innerHTML=`<table class="hist"><thead><tr><th>Data</th><th>Aluno(a)</th><th>Ano</th><th>Missão</th>
+    let rows=h.slice().reverse().map(r=>`<tr><td>${r.tipo==="avaliacao_completa"?"Avaliação":"Treino"}</td><td>${esc(fmtDate(r.data))}</td><td>${esc(r.avatar)} ${esc(r.nome)}</td><td>${esc(r.ano)}</td>
+      <td>${esc(r.missao)}</td><td><b>${safeNumber(r.pcpm)}</b></td><td class="${r.tipo==="avaliacao_completa"?pfClass(r.perfil):""}">${historyProfile(r)}</td>
+      <td>${safeNumber(r.lidas)}</td><td>${safeNumber(r.erros)}</td><td>${precisionValue(r.prec)===null?"—":precisionValue(r.prec)+"%"}</td><td>${safeNumber(r.seg)}s</td><td>${esc(r.quiz||"—")}</td></tr>`).join("");
+    t.innerHTML=`<table class="hist"><thead><tr><th>Tipo</th><th>Data</th><th>Aluno(a)</th><th>Ano</th><th>Atividade</th>
       <th>PCPM</th><th>Perfil</th><th>Lidas</th><th>Erros</th><th>Precisão</th><th>Tempo</th><th>Quiz</th></tr></thead><tbody>${rows}</tbody></table>`;
   }
   show("#s-hist");
 }
 function exportCSV(){
   const h=state.history;if(!h.length){toast("Histórico vazio.");return;}
-  const head=["Data","Aluno","Ano","Missao","PCPM","Perfil","PalavrasCorretas","Erros","PrecisaoPct","TempoSeg","Quiz"];
+  const head=["Tipo","Data","Aluno","Ano","Atividade","PCPM","Perfil","PalavrasCorretas","Erros","PrecisaoPct","TempoSeg","Quiz"];
   const esc=v=>`"${String(v).replace(/"/g,'""')}"`;
-  const lines=[head.join(";")].concat(h.map(r=>[fmtDate(r.data),r.nome,r.ano,r.missao,r.pcpm,r.perfil,r.lidas,r.erros,(typeof r.prec==="number"?r.prec:""),r.seg,r.quiz].map(esc).join(";")));
+  const lines=[head.join(";")].concat(h.map(r=>[r.tipo==="avaliacao_completa"?"Avaliação completa":"Treino",fmtDate(r.data),r.nome,r.ano,r.missao,r.pcpm,historyProfile(r),r.lidas,r.erros,(precisionValue(r.prec)??""),r.seg,r.quiz].map(esc).join(";")));
   const blob=new Blob(["﻿"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);
   a.download="agencia_leitura_"+new Date().toISOString().slice(0,10)+".csv";a.click();
@@ -533,20 +1536,21 @@ function exportCSV(){
 }
 $("#openHist").onclick=openHist;$("#histBack").onclick=openMap;
 $("#csvBtn").onclick=exportCSV;
-$("#clearHist").onclick=()=>{if(confirm("Apagar TODO o histórico? Não dá pra desfazer.")){state.history=[];save();openHist();}};
+$("#clearHist").onclick=()=>{if(confirm("Apagar TODO o histórico? Não dá pra desfazer.")){state.history=[];state.assessments=[];save();openHist();}};
 
 // ===== PLACAR =====
 function openBoard(){
   stopRec();stopTimer();
   const best={};
-  state.history.forEach(r=>{const k=r.nome.toLowerCase();if(!best[k]||r.pcpm>best[k].pcpm)best[k]={nome:r.nome,avatar:r.avatar,ano:r.ano,pcpm:r.pcpm,perfil:r.perfil};});
+  state.history.filter(r=>r.tipo==="avaliacao_completa").forEach(r=>{const nome=String(r.nome||"Agente"),k=nome.toLocaleLowerCase("pt-BR"),pcpm=safeNumber(r.pcpm);
+    if(!best[k]||pcpm>best[k].pcpm)best[k]={nome,avatar:r.avatar,ano:r.ano,pcpm,perfil:normalizedProfile(r.perfil)};});
   const arr=Object.values(best).sort((a,b)=>b.pcpm-a.pcpm);
   const L=$("#boardList");
-  if(!arr.length){L.innerHTML='<p class="sub">Sem placar ainda. Jogue para entrar no ranking!</p>';}
+  if(!arr.length){L.innerHTML='<div class="empty-state"><b>Placar aguardando resultados</b>Conclua uma avaliação completa para registrar o primeiro desempenho da agência.</div>';}
   else L.innerHTML=arr.map((r,i)=>{const medal=["🥇","🥈","🥉"][i]||(i+1)+"º";
     return `<div class="card"><div class="boardrow" style="width:100%">
-      <span class="pos">${medal}</span><span style="font-size:30px">${r.avatar}</span>
-      <div><b>${r.nome}</b><br><small class="${pfClass(r.perfil)}">${r.perfil} · ${r.ano}</small></div>
+      <span class="pos">${medal}</span><span style="font-size:30px">${esc(r.avatar)}</span>
+      <div><b>${esc(r.nome)}</b><br><small class="${pfClass(r.perfil)}">${esc(r.perfil)} · ${esc(r.ano)}</small></div>
       <span class="pcv">${r.pcpm}</span></div></div>`;}).join("");
   show("#s-board");
 }
@@ -555,118 +1559,200 @@ $("#openBoard").onclick=openBoard;$("#boardBack").onclick=openMap;
 // ===== TROCAR ALUNO =====
 $("#switchStudent").onclick=()=>{initIntro();show("#s-intro");};
 
-// ===== RELATÓRIO OFICIAL POR ALUNO =====
-function studentNames(){const s=new Set();state.history.forEach(r=>s.add(r.nome));return [...s];}
-function parseQuiz(q){if(!q||q==="—")return null;const m=q.split("/");return{c:+m[0],t:+m[1]};}
+// ===== RELATÓRIO PEDAGÓGICO POR ALUNO =====
+function studentNames(){const s=new Set();state.history.filter(r=>r.tipo==="avaliacao_completa").forEach(r=>{const nome=String(r.nome||"").trim();if(nome)s.add(nome);});return [...s];}
+function recordsForStudent(name){return state.history.filter(r=>r.tipo==="avaliacao_completa"&&String(r.nome||"").trim()===name);}
+function parseQuiz(q){const m=String(q||"").match(/^(\d+)\/(\d+)$/);if(!m||Number(m[2])<=0)return null;return{c:Number(m[1]),t:Number(m[2])};}
+function loadDemoData(){
+  const demoAssessment={
+    tipo:"avaliacao_completa",
+    data:new Date().toISOString(),
+    nome:"Agente Demonstrativo",
+    avatar:"🦸",
+    ano:"2º ano",
+    perfil:"Leitor Fluente",
+    nivelPre:null,
+    palavrasCorretas:75,
+    desconhecidasCorretas:52,
+    textoLidas:134,
+    textoCorretas:130,
+    textoErros:4,
+    prec:97,
+    prosodia:"sim",
+    quiz:"3/3"
+  };
+  const demoHistory={
+    tipo:"avaliacao_completa",
+    nome:"Agente Demonstrativo",
+    avatar:"🦸",
+    ano:"2º ano",
+    data:demoAssessment.data,
+    missao:"Avaliação completa (3 tarefas)",
+    pcpm:130,
+    perfil:"Leitor Fluente",
+    lidas:130,
+    erros:4,
+    prec:97,
+    seg:60,
+    quiz:"3/3"
+  };
+  state.assessments.push(demoAssessment);
+  state.history.push(demoHistory);
+  save();
+  toast("Dados de demonstração carregados! 🦸");
+  openReport();
+}
 function openReport(){
   stopRec();stopTimer();
   // carrega dados institucionais salvos nos campos
-  $("#repEscola").value=state.inst.escola||"";$("#repProf").value=state.inst.prof||"";
+  $("#repEscola").value=state.inst.escola||"";$("#repLocal").value=state.inst.local||"";$("#repProf").value=state.inst.prof||"";
   $("#repTurma").value=state.inst.turma||state.ano||"";$("#repCoord").value=state.inst.coord||"";
   const names=studentNames();const sel=$("#repSel");
-  if(!names.length){$("#repBody").innerHTML='<div class="report"><p>Nenhum aluno avaliado ainda. Faça uma prova primeiro.</p></div>';sel.innerHTML="";show("#s-report");return;}
-  sel.innerHTML=names.map(n=>`<option>${n}</option>`).join("");
+  const actionIds=["repPrint","repCsv","repShare","repPrintAll","repCsvAll"];
+  if(!names.length){
+    $("#repBody").innerHTML=`<div class="empty-state">
+      <b>Nenhuma avaliação completa registrada</b>
+      Conclua a avaliação de fluência para liberar o relatório individual e os arquivos da turma.
+      <br><br>
+      <button class="btn ghost" id="loadDemoBtn" style="border-color: var(--teal); color: var(--teal)">🧪 Carregar Aluno de Teste</button>
+    </div>`;
+    $("#loadDemoBtn").onclick=loadDemoData;
+    sel.innerHTML="";sel.appendChild(new Option("Nenhum aluno avaliado",""));sel.disabled=true;
+    actionIds.forEach(id=>$("#"+id).disabled=true);show("#s-report");return;
+  }
+  sel.disabled=false;actionIds.forEach(id=>$("#"+id).disabled=false);
+  sel.innerHTML="";names.forEach(n=>sel.appendChild(new Option(n,n)));
   if(names.indexOf(state.name)>=0)sel.value=state.name;
   generateReport(sel.value);show("#s-report");
 }
 // salva campos institucionais e regenera o relatório ao digitar
-[["repEscola","escola"],["repProf","prof"],["repTurma","turma"],["repCoord","coord"]].forEach(([id,k])=>{
-  $("#"+id).oninput=e=>{state.inst[k]=e.target.value;save();const sel=$("#repSel");if(sel.value)generateReport(sel.value);};
+[["repEscola","escola"],["repLocal","local"],["repProf","prof"],["repTurma","turma"],["repCoord","coord"]].forEach(([id,k])=>{
+  $("#"+id).oninput=e=>{state.inst[k]=e.target.value;save();clearInvalid(e.target,$("#reportError"));const sel=$("#repSel");if(sel.value)generateReport(sel.value);};
 });
+function saveReportFields(){
+  [["repEscola","escola"],["repLocal","local"],["repProf","prof"],["repTurma","turma"],["repCoord","coord"]]
+    .forEach(([id,k])=>{state.inst[k]=cleanText($("#"+id).value);$("#"+id).value=state.inst[k];});
+  save();
+}
+function validateReportFields(){
+  saveReportFields();
+  const required=[["repEscola","nome da escola"],["repLocal","município / UF"],["repProf","professor(a) responsável"],["repTurma","turma / sala"]];
+  required.forEach(([id])=>$("#"+id).classList.remove("is-invalid"));
+  for(const [id,label] of required){
+    const el=$("#"+id);
+    if(!cleanText(el.value)){
+      markInvalid(el,`Preencha ${label} antes de gerar o relatório.`,$("#reportError"));
+      el.focus();toast("Complete a identificação do relatório.");return false;
+    }
+  }
+  clearInvalid(null,$("#reportError"));
+  return true;
+}
 function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function safeNumber(value,fallback=0){const n=Number(value);return Number.isFinite(n)?Math.max(0,n):fallback;}
+function precisionValue(value){if(value===null||value===undefined||value==="")return null;
+  const n=Number(value);return Number.isFinite(n)?Math.max(0,Math.min(100,n)):null;}
+function shortCode(value){
+  let hash=2166136261;
+  for(const ch of String(value||"")){hash^=ch.codePointAt(0);hash=Math.imul(hash,16777619);}
+  return(hash>>>0).toString(36).toUpperCase().padStart(7,"0").slice(-7);
+}
+function recordLevel(r){
+  const pcpm=safeNumber(r.pcpm),prec=precisionValue(r.prec);
+  if(pcpm<=10)return 0;
+  if(pcpm<=65)return 1;
+  if(prec!==null)return prec>=90?2:1;
+  return normalizedProfile(r.perfil)==="Leitor Fluente"?2:1;
+}
+function profileFromLevel(level){return["Pré-leitor","Leitor Iniciante","Leitor Fluente"][level]||"Pré-leitor";}
 function reportInner(name){
-  const recs=state.history.filter(r=>r.nome===name);
+  const recs=recordsForStudent(name);
   if(!recs.length)return"";
-  const last=recs[recs.length-1],ano=last.ano,avatar=last.avatar;
-  const pcpms=recs.map(r=>r.pcpm),best=Math.max(...pcpms),avg=Math.round(pcpms.reduce((a,b)=>a+b,0)/pcpms.length);
-  const errs=recs.map(r=>r.erros||0),avgErr=Math.round(errs.reduce((a,b)=>a+b,0)/errs.length);
-  const quizzes=recs.map(r=>parseQuiz(r.quiz)).filter(Boolean);
-  const quizAvg=quizzes.length?Math.round(quizzes.reduce((a,q)=>a+q.c/q.t,0)/quizzes.length*100):null;
-  const otimo=(META[ano]||{otimo:80}).otimo;
-  // precisão média (registros novos têm r.prec; antigos não)
-  const precs=recs.map(r=>r.prec).filter(n=>typeof n==="number");
-  const avgPrec=precs.length?Math.round(precs.reduce((a,b)=>a+b,0)/precs.length):null;
-  // perfil oficial por registro: Fluente exige PCPM>65 E precisão ≥90%
-  const lvl=r=>r.pcpm<=10?0:r.pcpm<=64?1:(r.prec==null||r.prec>=90)?2:1;
-  const bestLvl=Math.max(...recs.map(lvl));
-  const perfil=["Pré-leitor","Leitor Iniciante","Leitor Fluente"][bestLvl];
-  const pcolor=["#e0524a","#d99a16","#2faf50"][bestLvl];
-  // atingiu meta da série só se Fluente (precisão ok) E PCPM ≥ alvo
-  const bateuMeta=bestLvl===2&&best>=otimo;
-  let parecer="";
-  // prioridades pedagógicas conforme Guia Prático CAEd/PAES 2025
-  if(bestLvl===2&&bateuMeta)parecer=`${name} atingiu a meta de excelência do ${ano} (alvo ${otimo} PCPM), apresentando leitura automatizada, consolidada e com precisão superior a 90%. Recomenda-se ampliar vocabulário, compreensão e autonomia leitora por meio de práticas desafiadoras — debates, projetos de leitura, produções coletivas e diversificação de gêneros textuais —, além de aprofundar o trabalho de prosódia e de interpretação de textos mais longos.`;
-  else if(bestLvl===2)parecer=`${name} é Leitor Fluente (mais de 65 palavras por minuto com precisão ≥90%), porém ainda abaixo do alvo da série (${otimo} PCPM no ${ano}). Sugere-se leitura diária cronometrada para ganho de velocidade, somada a atividades de entonação, ritmo e respeito à pontuação (prosódia) e à ampliação do repertório de gêneros e do vocabulário.`;
-  else if(bestLvl===1)parecer=`${name} encontra-se no perfil Leitor Iniciante (11–64 PCPM): já reconhece o sistema alfabético, mas a decodificação ainda é silábica, lenta ou fragmentada, o que compromete a fluência. Prioridade: automatizar a decodificação e desenvolver fluência e prosódia por meio de leitura compartilhada e em pares, listas de palavras de uso frequente, textos curtos rimados, trava-línguas e releitura orientada e progressiva do mesmo texto.`;
-  else parecer=`${name} encontra-se no perfil Pré-leitor (até 10 PCPM), com a leitura ainda não consolidada e dificuldades na decodificação. Prioridade: fortalecer a consciência fonológica (rimas, aliterações, segmentação oral de palavras e sílabas, parlendas e cantigas) e o reconhecimento do sistema alfabético (alfabeto móvel, bingo de letras, pareamento letra–imagem, correspondência fonema–grafema), com leitura assistida e apoio de áudio antes de cronometrar.`;
-  if(avgPrec!==null&&avgPrec<90)parecer+=` Atenção à PRECISÃO: média de ${avgPrec}% (abaixo dos 90% exigidos para fluência) — reforçar leitura cuidadosa, observando trocas de letras (pares p/b, t/d, f/v, s/z), omissões/acréscimos e finais de palavra.`;
-  else if(avgErr>=5)parecer+=` Atenção à PRECISÃO: média de ${avgErr} erros por avaliação — reforçar leitura cuidadosa (trocas de letras e finais de palavra).`;
-  if(quizAvg!==null)parecer+=` Compreensão de texto (interpretação): média de ${quizAvg}% de acerto nas perguntas.`;
-  const lastN=recs.slice(-12),maxp=Math.max(...lastN.map(r=>r.pcpm),1);
-  const spark=lastN.map(r=>`<div class="bar" style="height:${Math.max(3,Math.round(r.pcpm/maxp*100))}%"><span>${r.pcpm}</span></div>`).join("");
-  const rows=recs.slice().reverse().map(r=>`<tr><td>${fmtDate(r.data)}</td><td>${r.missao}</td><td><b>${r.pcpm}</b></td><td>${r.perfil}</td><td>${r.lidas}</td><td>${r.erros}</td><td>${typeof r.prec==="number"?r.prec+"%":"—"}</td><td>${r.seg}s</td><td>${r.quiz}</td></tr>`).join("");
+  const complete=state.assessments.filter(r=>String(r.nome||"").trim()===name);
+  const last=recs[recs.length-1],ano=last.ano||"2º ano";
+  const lastAssessment=complete[complete.length-1]||null;
+  const perfil=lastAssessment?.perfil||normalizedProfile(last.perfil);
+  const perfilLabel=perfil==="Pré-leitor"&&lastAssessment?.nivelPre?`${perfil} · Nível ${lastAssessment.nivelPre}`:perfil;
+  const precision=precisionValue(lastAssessment?.prec??last.prec);
+  const quiz=parseQuiz(lastAssessment?.quiz||last.quiz);
+  const quizPct=quiz?Math.round(quiz.c/quiz.t*100):null;
+  const textCorrect=safeNumber(lastAssessment?.textoCorretas??last.pcpm);
+  const textRead=safeNumber(lastAssessment?.textoLidas??last.lidas);
+  const textErrors=safeNumber(lastAssessment?.textoErros??last.erros);
+  const wordsCorrect=lastAssessment?`${safeNumber(lastAssessment.palavrasCorretas)} / 80`:"—";
+  const decodingCorrect=lastAssessment?`${safeNumber(lastAssessment.desconhecidasCorretas)} / 60`:"—";
+  const prosody=lastAssessment?lastAssessment.prosodia==="sim"?"Pausas respeitadas":"Pausas ainda irregulares":"Não registrado";
+  let interpretation="";
+  if(perfil==="Leitor Fluente")interpretation="O desempenho atingiu o critério de referência para leitura fluente: mais de 65 palavras corretas no texto e precisão igual ou superior a 90%. O resultado indica leitura com velocidade e exatidão suficientes para ampliar o foco em prosódia, vocabulário e compreensão.";
+  else if(perfil==="Leitor Iniciante")interpretation="O desempenho atingiu os critérios mínimos nas listas de palavras e decodificação, mas ainda não alcançou simultaneamente velocidade e precisão no texto. O resultado indica que a leitura está em desenvolvimento e precisa ganhar automaticidade.";
+  else interpretation=`O desempenho permaneceu no perfil Pré-leitor${lastAssessment?.nivelPre?`, nível ${lastAssessment.nivelPre}`:""}, definido pela quantidade lida e pelo comportamento observado pelo aplicador. O resultado orienta intervenção sistemática em consciência fonológica, relações entre letras e sons e leitura apoiada de palavras.`;
+  const recommendation=officialRecommendation(perfil,lastAssessment?.nivelPre||null);
+  const comprehension=quizPct===null?"A compreensão não foi registrada.":quizPct>=67?`A compreensão apresentou ${quizPct}% de acertos, indicando boa recuperação das informações do texto.`:`A compreensão apresentou ${quizPct}% de acertos e deve ser retomada com perguntas literais, reconto e localização de pistas no texto.`;
+  const historyRows=recs.slice(-6).reverse().map(r=>`<tr><td>${esc(fmtDate(r.data).split(" ")[0])}</td>
+    <td>${normalizedProfile(r.perfil||profileFromLevel(recordLevel(r)))}</td><td>${safeNumber(r.pcpm)}</td>
+    <td>${precisionValue(r.prec)===null?"—":precisionValue(r.prec)+"%"}</td><td>${esc(r.quiz||"—")}</td></tr>`).join("");
   const inst=state.inst||{};
   const hoje=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
-  const protocolo=`EP-${ano.replace(/\D/g,"")||"0"}${("0000"+(recs.length)).slice(-3)}-${new Date().getFullYear()}`;
+  const aplicacao=fmtDate(last.data).split(" ")[0];
+  const protocolo=`EP-${String(ano||"").replace(/\D/g,"")||"0"}-${shortCode(name+"|"+recs[0].data)}-${("000"+recs.length).slice(-3)}-${new Date().getFullYear()}`;
   return `
     <div class="rletter">
-      <div class="gov">SECRETARIA DE EDUCAÇÃO · ACOMPANHAMENTO DA APRENDIZAGEM</div>
-      <div class="esc">${inst.escola?esc(inst.escola):"________________________________________"}</div>
-      <div class="doc">Relatório Individual de Avaliação da Fluência em Leitura</div>
-      <div class="sub2">Programa de Avaliação da Fluência Leitora · Metodologia CAEd/UFJF · Alinhado à BNCC</div>
-      <div class="proto">Documento nº ${protocolo} &nbsp;·&nbsp; Emitido em ${hoje}</div>
+      <div class="brand">Agência de Detetives Literários · Instrumento pedagógico autoral</div>
+      <div class="esc">${inst.escola?esc(inst.escola):"Unidade escolar não informada"}</div>
+      <div class="doc">Relatório Individual de Fluência Leitora</div>
+      <div class="sub2">${inst.local?esc(inst.local)+" · ":""}Avaliação pedagógica do 2º ano do Ensino Fundamental</div>
+      <div class="proto"><span>Registro: ${protocolo}</span><span>Aplicação: ${aplicacao}</span><span>Emissão: ${hoje}</span></div>
     </div>
+    <div class="report-callout"><b>Finalidade:</b> apoiar decisões pedagógicas e o acompanhamento da aprendizagem. Este documento não é resultado oficial de avaliação externa e deve ser interpretado em conjunto com outras evidências produzidas pela escola.</div>
     <h2>1. Identificação</h2>
     <table class="ridtable"><tbody>
-      <tr><td class="k">Aluno(a)</td><td>${esc(name)}</td><td class="k">Ano/Série</td><td>${ano}</td></tr>
-      <tr><td class="k">Turma</td><td>${inst.turma?esc(inst.turma):ano}</td><td class="k">Professor(a)</td><td>${inst.prof?esc(inst.prof):"—"}</td></tr>
-      <tr><td class="k">Período avaliado</td><td>${fmtDate(recs[0].data).split(" ")[0]} a ${fmtDate(last.data).split(" ")[0]}</td><td class="k">Emissão</td><td>${hoje}</td></tr>
+      <tr><td class="k">Aluno(a)</td><td>${esc(name)}</td><td class="k">Ano/Série</td><td>${esc(ano)}</td></tr>
+      <tr><td class="k">Turma</td><td>${inst.turma?esc(inst.turma):esc(ano)}</td><td class="k">Professor(a)</td><td>${inst.prof?esc(inst.prof):"Não informado"}</td></tr>
+      <tr><td class="k">Aplicação</td><td>${aplicacao}</td><td class="k">Responsável pedagógico</td><td>${inst.coord?esc(inst.coord):"Não informado"}</td></tr>
     </tbody></table>
-    <h2>2. Resumo dos Resultados</h2>
+    <h2>2. Resultado consolidado</h2>
     <div class="rstats">
-      <div class="rstat"><b>${best}</b><small>Melhor PCPM</small></div>
-      <div class="rstat"><b>${avg}</b><small>PCPM médio</small></div>
-      <div class="rstat"><b>${recs.length}</b><small>Avaliações</small></div>
-      <div class="rstat"><b>${avgPrec!==null?avgPrec+"%":"—"}</b><small>Precisão média</small></div>
-      <div class="rstat"><b>${avgErr}</b><small>Erros médios</small></div>
-      <div class="rstat"><b>${quizAvg!==null?quizAvg+"%":"—"}</b><small>Compreensão</small></div></div>
-    <p>Perfil de leitura apurado: <span class="badgeR" style="background:${pcolor}">${perfil}</span>
-      &nbsp; Meta de referência do ${ano}: <b>${otimo} PCPM</b> — ${bateuMeta?"meta atingida":bestLvl===2?"leitor fluente, abaixo do alvo da série":"meta não atingida"}.
-      <br><small style="color:#777">Considera-se Leitor Fluente o(a) estudante que lê mais de 65 palavras corretas por minuto <b>e</b> com precisão igual ou superior a 90%.</small></p>
-    <h2>3. Evolução do Desempenho</h2>
-    <p style="font-size:12px;color:#555;margin:0 0 4px">Cada barra representa o resultado (PCPM) de uma avaliação, da mais antiga (à esquerda) à mais recente (à direita) — últimas ${lastN.length} avaliações.</p>
-    <div class="spark">${spark}</div>
-    <h2>4. Parecer Pedagógico</h2>
-    <div class="parecer">${parecer}</div>
-    <h2>5. Detalhamento das Avaliações</h2>
-    <table><thead><tr><th>Data</th><th>Atividade</th><th>PCPM</th><th>Perfil</th><th>Lidas</th><th>Erros</th><th>Precisão</th><th>Tempo</th><th>Compreensão</th></tr></thead><tbody>${rows}</tbody></table>
-    <h2>6. Glossário e Notas Explicativas</h2>
-    <table class="ridtable gloss"><tbody>
-      <tr><td class="k">Fluência leitora</td><td>Capacidade de ler com precisão, velocidade adequada e entonação, de modo a compreender o texto.</td></tr>
-      <tr><td class="k">PCPM</td><td>Palavras Corretas Por Minuto. Total de palavras lidas corretamente (palavras lidas menos os erros), ajustado para o intervalo de 60 segundos. É o principal indicador de velocidade da leitura.</td></tr>
-      <tr><td class="k">Precisão</td><td>Percentual de palavras lidas corretamente em relação ao total lido. Para ser considerado Leitor Fluente, exige-se precisão de pelo menos 90%.</td></tr>
-      <tr><td class="k">Prosódia</td><td>Entonação, ritmo e respeito às pausas e à pontuação durante a leitura. Não é medida automaticamente por este sistema; deve ser observada presencialmente pelo(a) docente.</td></tr>
-      <tr><td class="k">Decodificação</td><td>Processo de converter as letras (grafemas) em sons (fonemas) para reconhecer as palavras.</td></tr>
-      <tr><td class="k">Compreensão</td><td>Entendimento do texto, verificado por perguntas de interpretação após a leitura.</td></tr>
-      <tr><td class="k">Perfis de leitura</td><td><b>Pré-leitor</b> (até 10 PCPM): leitura ainda não consolidada. <b>Leitor Iniciante</b> (11 a 64 PCPM): decodifica de forma silábica ou fragmentada. <b>Leitor Fluente</b> (mais de 65 PCPM com precisão ≥ 90%): leitura automatizada.</td></tr>
-      <tr><td class="k">CAEd / UFJF</td><td>Centro de Políticas Públicas e Avaliação da Educação, da Universidade Federal de Juiz de Fora — responsável pela metodologia de correção e classificação da avaliação de fluência.</td></tr>
-      <tr><td class="k">PAES / SEDU</td><td>Pacto pela Aprendizagem (programa de alfabetização) e Secretaria de Estado da Educação — referências da política pública de avaliação da fluência leitora.</td></tr>
-      <tr><td class="k">BNCC</td><td>Base Nacional Comum Curricular — documento que define as aprendizagens essenciais de cada etapa da Educação Básica.</td></tr>
+      <div class="rstat profile-stat"><b>${perfilLabel}</b><small>Perfil de referência</small></div>
+      <div class="rstat"><b>${textCorrect}</b><small>Palavras corretas no texto</small></div>
+      <div class="rstat"><b>${precision===null?"—":precision+"%"}</b><small>Precisão no texto</small></div>
+      <div class="rstat"><b>${quizPct===null?"—":quizPct+"%"}</b><small>Compreensão</small></div>
+    </div>
+    <table><thead><tr><th>Componente</th><th>Resultado</th><th>Registro complementar</th></tr></thead><tbody>
+      <tr><td>Leitura de palavras</td><td><b>${wordsCorrect}</b> corretas</td><td>80 itens · 60 segundos</td></tr>
+      <tr><td>Itens de decodificação</td><td><b>${decodingCorrect}</b> corretos</td><td>60 itens autorais · 60 segundos</td></tr>
+      <tr><td>Leitura de texto</td><td><b>${textCorrect}</b> corretas de ${textRead} lidas</td><td>${textErrors} erro(s) · ${prosody}</td></tr>
+      <tr><td>Compreensão</td><td><b>${lastAssessment?.quiz||last.quiz||"—"}</b></td><td>Questões sobre o texto lido</td></tr>
     </tbody></table>
+    <h2>3. Interpretação pedagógica</h2>
+    <div class="parecer">
+      <p><b>Leitura do resultado.</b> ${esc(interpretation)}</p>
+      <p><b>Encaminhamento recomendado.</b> ${esc(recommendation)}</p>
+      <p><b>Compreensão.</b> ${esc(comprehension)}</p>
+    </div>
+    <h2>4. Histórico recente</h2>
+    <table><thead><tr><th>Data</th><th>Perfil</th><th>PCPM no texto</th><th>Precisão</th><th>Compreensão</th></tr></thead>
+      <tbody>${historyRows}</tbody></table>
+    <h2>5. Nota técnica</h2>
+    <div class="report-callout">
+      <b>Composição autoral:</b> as listas, os itens de decodificação, o texto e as questões foram criados para este projeto. A estrutura de três tarefas e os critérios de referência foram estudados a partir de documentos públicos sobre avaliação de fluência.<br><br>
+      <b>Critérios usados:</b> Leitor Fluente: mais de 65 palavras corretas no texto e precisão igual ou superior a 90%. Leitor Iniciante: ao menos 11 palavras e 6 itens de decodificação corretos, sem alcançar o critério de fluência no texto. Pré-leitor: níveis 1 a 4 conforme desempenho e comportamento de leitura informado pelo aplicador.<br><br>
+      <b>Limites:</b> a correção é manual e depende da observação do aplicador. O resultado não equivale à aplicação oficial do CAEd/UFJF e não deve ser utilizado isoladamente para diagnóstico, retenção ou encaminhamento clínico.
+    </div>
     <div class="rsign">
       <div class="sg">${inst.prof?esc(inst.prof):"Professor(a) responsável"}<br><span style="font-size:11px;color:#777">Professor(a) responsável</span></div>
       <div class="sg">${inst.coord?esc(inst.coord):"Coordenação pedagógica"}<br><span style="font-size:11px;color:#777">Coordenação pedagógica</span></div>
     </div>
-    <div class="rfoot"><b>Natureza do documento:</b> relatório de caráter pedagógico-diagnóstico, destinado ao acompanhamento individual da aprendizagem da leitura e ao planejamento de intervenções. <b>Metodologia:</b> as medidas foram coletadas por meio de atividades de leitura oral com apoio de reconhecimento de voz e marcação manual do(a) aplicador(a), seguindo as faixas de referência da Avaliação de Fluência em Leitura (CAEd/UFJF). Por se tratar de instrumento de treino e triagem, os valores são <b>indicativos</b> e <b>não substituem</b> a avaliação oficial nem o juízo presencial do(a) docente. Documento gerado eletronicamente em ${hoje}; dispensa assinatura física quando emitido em meio digital.</div>`;
+    <div class="rfoot"><b>Uso pedagógico interno.</b> Preserve este documento conforme as regras de acesso e proteção de dados adotadas pela rede de ensino. Referência metodológica consultada: <a href="${FLUENCY_GUIDE_URL}">Guia Prático de Análise de Resultados da Avaliação de Fluência 2025, SEDU/ES</a>. Documento gerado eletronicamente em ${hoje}.</div>`;
 }
 function generateReport(name){
   const html=reportInner(name);
-  $("#repBody").innerHTML=html?`<div class="report">${html}</div>`:'<div class="report"><p>Nenhum aluno avaliado ainda. Faça uma prova primeiro.</p></div>';
+  $("#repBody").innerHTML=html?`<div class="report">${html}</div>`:'<div class="empty-state"><b>Relatório indisponível</b>Nenhuma avaliação completa foi encontrada para este aluno.</div>';
 }
 // Gera um único documento com o parecer de TODOS os alunos (quebra de página entre eles) e imprime.
 function printAllReports(){
   const names=studentNames();
   if(!names.length){toast("Sem alunos para gerar.");return;}
+  if(!validateReportFields())return;
   const all=names.map(n=>`<div class="report">${reportInner(n)}</div>`).join("");
   const prev=$("#repBody").innerHTML;
   $("#repBody").innerHTML=all;
@@ -677,21 +1763,26 @@ function printAllReports(){
 }
 $("#repSel").onchange=e=>generateReport(e.target.value);
 $("#openReport").onclick=openReport;$("#repBack").onclick=openMap;
-$("#repPrint").onclick=()=>window.print();
+$("#repPrint").onclick=()=>{if(validateReportFields())window.print();};
 $("#repPrintAll").onclick=printAllReports;
 $("#repCsvAll").onclick=exportCSV;
 $("#repCsv").onclick=()=>{
-  const name=$("#repSel").value,recs=state.history.filter(r=>r.nome===name);if(!recs.length){toast("Sem dados.");return;}
+  const name=$("#repSel").value,recs=recordsForStudent(name);if(!recs.length){toast("Sem dados.");return;}
   const head=["Data","Aluno","Ano","Missao","PCPM","Perfil","PalavrasCorretas","Erros","PrecisaoPct","TempoSeg","Quiz"],esc=v=>`"${String(v).replace(/"/g,'""')}"`;
-  const lines=[head.join(";")].concat(recs.map(r=>[fmtDate(r.data),r.nome,r.ano,r.missao,r.pcpm,r.perfil,r.lidas,r.erros,(typeof r.prec==="number"?r.prec:""),r.seg,r.quiz].map(esc).join(";")));
+  const lines=[head.join(";")].concat(recs.map(r=>[fmtDate(r.data),r.nome,r.ano,r.missao,r.pcpm,normalizedProfile(r.perfil),r.lidas,r.erros,(precisionValue(r.prec)??""),r.seg,r.quiz].map(esc).join(";")));
   const blob=new Blob(["﻿"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);a.download="relatorio_"+name.replace(/\s+/g,"_")+".csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);toast("CSV do aluno exportado!");
+  const fileName=name.replace(/[^\p{L}\p{N}]+/gu,"_").replace(/^_+|_+$/g,"")||"aluno";
+  a.href=URL.createObjectURL(blob);a.download="relatorio_"+fileName+".csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);toast("CSV do aluno exportado!");
 };
 $("#repShare").onclick=()=>{
-  const name=$("#repSel").value,recs=state.history.filter(r=>r.nome===name);if(!recs.length){toast("Sem dados.");return;}
-  const best=Math.max(...recs.map(r=>r.pcpm)),ano=recs[recs.length-1].ano;
-  const perfil=best<=10?"Pré-leitor":best<=64?"Leitor Iniciante":"Leitor Fluente";
-  const txt=`Relatório de Fluência em Leitura — ${name} (${ano})\nMelhor PCPM: ${best}\nPerfil: ${perfil}\nAvaliações: ${recs.length}\n(Gerado pelo app Exploradores das Palavras)`;
+  if(!validateReportFields())return;
+  const name=$("#repSel").value,recs=recordsForStudent(name);if(!recs.length){toast("Sem dados.");return;}
+  const last=recs[recs.length-1],ano=last.ano;
+  const assessment=state.assessments.filter(r=>String(r.nome||"").trim()===name).slice(-1)[0];
+  const perfil=assessment?.perfil||normalizedProfile(last.perfil);
+  const perfilLabel=perfil==="Pré-leitor"&&assessment?.nivelPre?`${perfil} · Nível ${assessment.nivelPre}`:perfil;
+  const prec=precisionValue(assessment?.prec??last.prec);
+  const txt=`Relatório de Fluência em Leitura — ${name} (${ano})\nPCPM no texto: ${safeNumber(last.pcpm)}\nPerfil: ${perfilLabel}${prec===null?"":`\nPrecisão: ${prec}%`}\nCompreensão: ${assessment?.quiz||last.quiz||"não registrada"}\n(Gerado pela Agência de Detetives Literários)`;
   if(navigator.share)navigator.share({title:"Relatório "+name,text:txt}).catch(()=>{});
   else location.href="mailto:?subject="+encodeURIComponent("Relatório de Fluência - "+name)+"&body="+encodeURIComponent(txt+"\n\nDica: use Imprimir/PDF para anexar o relatório completo.");
 };
@@ -720,13 +1811,134 @@ function openSettings(){
   ov.querySelector("#fsBtn").onclick=()=>{try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}catch(e){}};
   ov.querySelector("#setClose").onclick=()=>ov.remove();
 }
+function openMicTest(){
+  stopRec(); stopTimer();
+  const ov=document.createElement("section");
+  ov.className="screen active";ov.style.background="#0f1a30f4";ov.style.zIndex=95;
+  ov.innerHTML=`
+    <div class="winbox" style="max-width:500px; text-align:left">
+      <h1 style="font-size:24px; text-align:center; margin-bottom:15px">🎤 Teste de Microfone</h1>
+      <p style="font-size:14px; line-height:1.5; margin-bottom:15px">
+        Esta ferramenta verifica se o navegador consegue captar o áudio do seu microfone e reconhecer a sua voz.
+      </p>
+
+      <div id="micTestStatus" style="background:rgba(255,255,255,0.07); border:1px solid var(--border); border-radius:12px; padding:15px; margin-bottom:15px; min-height:100px">
+        <p style="margin:0; color:var(--muted)">Clique em "Começar Teste" para iniciar.</p>
+      </div>
+
+      <div class="row" style="justify-content:center; gap:10px">
+        <button class="btn teal" id="startMicTestBtn">▶ Começar Teste</button>
+        <button class="btn ghost" id="closeMicTestBtn">Fechar</button>
+      </div>
+    </div>
+  `;
+  $("#app").appendChild(ov);
+
+  let testRec = null;
+  let testStream = null;
+
+  const statusBox = ov.querySelector("#micTestStatus");
+  const startBtn = ov.querySelector("#startMicTestBtn");
+  const closeBtn = ov.querySelector("#closeMicTestBtn");
+
+  closeBtn.onclick = () => {
+    if (testRec) { try { testRec.stop(); } catch(e){} }
+    if (testStream) { testStream.getTracks().forEach(t => t.stop()); }
+    ov.remove();
+  };
+
+  startBtn.onclick = async () => {
+    startBtn.disabled = true;
+    statusBox.innerHTML = `<p style="margin:0; color:var(--gold)">⏳ Solicitando permissão do microfone...</p>`;
+
+    // 1. Testar gravação/captura (getUserMedia)
+    let audioOk = false;
+    try {
+      testStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioOk = true;
+    } catch(e) {
+      statusBox.innerHTML = `
+        <p style="margin:0; color:var(--red); font-weight:bold">❌ Erro de Acesso ao Microfone</p>
+        <p style="margin:5px 0 0; font-size:13px; color:#fba8a1">O navegador não liberou o áudio ou nenhum microfone foi detectado. No Chrome/Edge, confira o ícone de cadeado ao lado do endereço e permita o microfone para este site. Se estiver abrindo o arquivo por "file:///", rode por localhost; se já estiver em localhost, use os botões ✓ Leu/toque enquanto ajusta a permissão.</p>
+      `;
+      startBtn.disabled = false;
+      return;
+    }
+
+    // 2. Testar Reconhecimento de Voz
+    const TestRecCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!TestRecCtor) {
+      statusBox.innerHTML = `
+        <p style="margin:0; color:var(--green); font-weight:bold">✅ Microfone Captando (Áudio OK)</p>
+        <p style="margin:5px 0; color:var(--red)">⚠️ Reconhecimento de voz não suportado neste navegador.</p>
+        <p style="margin:5px 0 0; font-size:13px; color:var(--muted)">A gravação de áudio da prova vai funcionar, mas o reconhecimento de voz dinâmico (nos treinos) requer o Google Chrome ou Microsoft Edge.</p>
+      `;
+      startBtn.disabled = false;
+      return;
+    }
+
+    statusBox.innerHTML = `
+      <p style="margin:0; color:var(--green); font-weight:bold">✅ Microfone Captando (Áudio OK)</p>
+      <p style="margin:10px 0 5px; color:var(--teal); font-weight:bold">🎧 Fale alguma coisa agora...</p>
+      <p style="margin:0; font-size:13px; color:var(--muted)">Diga "teste", "jogo" ou leia qualquer palavra.</p>
+    `;
+
+    try {
+      testRec = new TestRecCtor();
+      testRec.lang = "pt-BR";
+      testRec.continuous = false;
+      testRec.interimResults = true;
+
+      testRec.onresult = e => {
+        const text = e.results[0][0].transcript;
+        const isFinal = e.results[0].isFinal;
+        statusBox.innerHTML = `
+          <p style="margin:0; color:var(--green); font-weight:bold">✅ Microfone Captando (Áudio OK)</p>
+          <p style="margin:10px 0 5px; color:var(--green); font-weight:bold">🎉 Voz reconhecida com sucesso!</p>
+          <div style="background:rgba(255,255,255,0.1); border-radius:8px; padding:10px; font-size:16px; font-weight:bold; color:var(--gold); border:1px dashed var(--teal)">
+            "${text}"
+          </div>
+          ${isFinal ? '<p style="margin:5px 0 0; font-size:12px; color:var(--green)">Teste concluído com sucesso!</p>' : ''}
+        `;
+        if (isFinal) {
+          beep(880, 0.15, "sine");
+          startBtn.disabled = false;
+        }
+      };
+
+      testRec.onerror = ev => {
+        statusBox.innerHTML = `
+          <p style="margin:0; color:var(--green); font-weight:bold">✅ Microfone Captando (Áudio OK)</p>
+          <p style="margin:10px 0 0; color:var(--red); font-weight:bold">⚠️ Falha no reconhecimento: ${ev.error}</p>
+          <p style="margin:5px 0 0; font-size:12px; color:var(--muted)">Se o erro for "no-speech", fale mais alto ou mais perto do microfone.</p>
+        `;
+        startBtn.disabled = false;
+      };
+
+      testRec.onend = () => {
+        startBtn.disabled = false;
+      };
+
+      testRec.start();
+    } catch(err) {
+      statusBox.innerHTML = `
+        <p style="margin:0; color:var(--green); font-weight:bold">✅ Microfone Captando (Áudio OK)</p>
+        <p style="margin:10px 0 0; color:var(--red)">Falha ao iniciar motor de voz: ${err.message}</p>
+      `;
+      startBtn.disabled = false;
+    }
+  };
+}
+
 $("#openSet").onclick=openSettings;
+$("#testMicMapBtn").onclick=openMicTest;
+$("#testMicPlayBtn").onclick=openMicTest;
 applySettings();
 
 // ============ PLAY ============
 let cur=null,total=0,pointer=0,combo=0,playing=false;
 let deck=[],deckIdx=0,flashCount=0,curWord="",cardAccepted=false;
-let flashErrors=0,narrErrors=0;
+let flashErrors=0,narrManualErrors=new Set(),narrVoiceErrors=new Set();
 let curQuestions=[];
 // sorteia conteúdo do banco sem repetir o anterior
 const lastPick={words:-1,pseudo:-1,text:-1};
@@ -740,8 +1952,8 @@ function startMission(i){
   else if(cur.bank==="pseudo")cur.data=pick(PSEUDO_BANK_BY_YEAR[state.ano]||PSEUDO_BANK_BY_YEAR["2º ano"],"pseudo");
   else if(cur.bank==="text"){const t=pick(TEXT_BANK,"text");cur.data=t.text.split(/\s+/);curQuestions=t.q;}
   total=cur.data.length;
-  $("#mStudent").textContent=`👤 ${state.name||"Explorador(a)"} · ${state.ano}`;
-  $("#mTitle").textContent=`${cur.ic} ${cur.title}`;$("#mHint").textContent=cur.hint;
+  $("#mStudent").textContent=`Agente ${state.name||"Agente"} · ${state.ano}`;
+  $("#mTitle").textContent=`${cur.ic} ${cur.title}`;syncMissionHint();
   const p=$("#paper");
   if(cur.flash){
     p.className="paper flash";p.innerHTML='<div class="flashph">👇 Toque em <b>Iniciar</b> 🎮</div>';
@@ -762,6 +1974,12 @@ function startMission(i){
 }
 function els(){return $("#paper").querySelectorAll(".w");}
 function markCurrent(){if(cur.flash)return;els().forEach((e,i)=>e.classList.toggle("cur",i===pointer&&i<total));}
+function narrativeErrorIndexes(){return new Set([...narrManualErrors,...narrVoiceErrors]);}
+function syncNarrativeErrorMarks(){
+  if(!cur||!cur.narr)return;
+  const errors=narrativeErrorIndexes();
+  els().forEach((e,i)=>e.classList.toggle("error",errors.has(i)));
+}
 
 // ---- baralho gincana (embaralha, repõe quando acaba) ----
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -783,10 +2001,21 @@ function flashLiveMatch(tokens){
 function speak(t){if(!t)return;try{const u=new SpeechSynthesisUtterance(t);u.lang="pt-BR";u.rate=0.85;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}}
 // pular card = não soube ler = erro de precisão
 function skipCard(){
-  if(!playing||!cur.flash||cardAccepted)return;
-  cardAccepted=true;combo=0;flashErrors++;
-  const card=$("#paper .flashcard");if(card){card.classList.remove("in");card.classList.add("out");}
-  setTimeout(()=>{if(playing)nextCard();},90);
+  if(!playing||!cur)return;
+  combo=0;
+  if(cur.flash){
+    if(cardAccepted)return;
+    cardAccepted=true;flashErrors++;
+    const card=$("#paper .flashcard");if(card){card.classList.remove("in");card.classList.add("out");}
+    setTimeout(()=>{if(playing)nextCard();},90);
+    return;
+  }
+  if(cur.narr&&pointer<total){
+    const e=els()[pointer];narrManualErrors.add(pointer);
+    if(e){e.classList.add("read","error");e.classList.remove("cur");}
+    pointer++;markCurrent();updateProgress();
+    if(pointer>=total)finishTimed(true);
+  }
 }
 $("#speakBtn").onclick=()=>{if(cur&&cur.flash&&curWord)speak(curWord);};
 $("#skipBtn").onclick=skipCard;
@@ -795,10 +2024,13 @@ $("#readBtn").onclick=()=>{if(playing)acceptWord();};
 function tapWord(idx){
   if(!playing)return;
   if(cur.flash){acceptWord();return;}
-  // narrativa: tocar numa palavra marca TUDO até ela como lido (catch-up p/ texto grande)
-  if(idx<pointer)return;            // já lida
+  // Ao tocar adiante, as palavras puladas contam como erro e a palavra tocada como acerto.
+  if(idx<pointer)return;
   const E=els();
-  for(let i=pointer;i<=idx && i<total;i++){if(E[i]){E[i].classList.add("read");E[i].classList.remove("cur");}}
+  for(let i=pointer;i<=idx && i<total;i++){
+    if(i<idx)narrManualErrors.add(i);
+    if(E[i]){E[i].classList.add("read");E[i].classList.toggle("error",i<idx);E[i].classList.remove("cur");}
+  }
   pointer=Math.min(idx+1,total);
   combo++;popSound(combo);if(E[idx])burst(E[idx]);
   markCurrent();updateProgress();
@@ -825,7 +2057,8 @@ function acceptWord(){
 }
 function updateProgress(){
   if(cur&&cur.flash){$("#pFill").style.width="100%";$("#pText").textContent="⭐ "+flashCount+" palavras lidas";}
-  else{$("#pFill").style.width=(total?pointer/total*100:0)+"%";$("#pText").textContent=pointer+" / "+total+" palavras";}
+  else{const errors=narrativeErrorIndexes().size;$("#pFill").style.width=(total?pointer/total*100:0)+"%";
+    $("#pText").textContent=pointer+" / "+total+" palavras"+(errors?` · ${errors} erro${errors===1?"":"s"}`:"");}
 }
 $("#replayBtn").onclick=()=>startMission(cur.id);
 $("#backMap").onclick=openMap;
@@ -841,7 +2074,12 @@ function winTraining(){
 
 // ============ PROVA CRONOMETRADA ============
 let timer=null,tStart=0,DUR=60;
-function syncDur(){$("#durLbl").textContent=DUR;$("#startTimed").textContent=`▶ Iniciar (${DUR}s)`;if(!playing){$("#tnum").textContent=DUR;}}
+function syncMissionHint(){
+  if(!cur)return;
+  $("#mHint").textContent=cur.flash?`${cur.hint} Quantas você consegue em ${DUR}s?`:`${cur.hint} A prova termina em ${DUR}s.`;
+}
+function syncDur(){$("#durLbl").textContent=DUR;$("#startTimed").textContent=`▶ Iniciar (${DUR}s)`;
+  if(!playing){$("#tnum").textContent=DUR;syncMissionHint();}}
 document.querySelectorAll(".durbtn").forEach(b=>b.onclick=()=>{
   if(playing)return; // não muda durante prova
   DUR=Math.max(15,Math.min(180,DUR+parseInt(b.dataset.d,10)));syncDur();beep(660,0.04);
@@ -849,14 +2087,14 @@ document.querySelectorAll(".durbtn").forEach(b=>b.onclick=()=>{
 $("#startTimed").onclick=()=>{
   pointer=0;combo=0;flashCount=0;
   if(cur.flash){deck=shuffle(cur.data);deckIdx=0;}
-  else{els().forEach(e=>e.classList.remove("read"));markCurrent();}
-  provaDone=false;flashErrors=0;narrErrors=0;playing=true;$("#startTimed").style.display="none";
-  $("#skipBtn").style.display=cur.flash?"inline-block":"none";
+  else{els().forEach(e=>e.classList.remove("read","error"));markCurrent();}
+  provaDone=false;flashErrors=0;narrManualErrors=new Set();narrVoiceErrors=new Set();playing=true;$("#startTimed").style.display="none";
+  $("#skipBtn").style.display="inline-block";
   $("#readBtn").style.display="inline-block"; // marcação manual: mic pode falhar
   if(cur.flash)nextCard();
   updateProgress();
   startTimer();startRec();
-  toast(cur.flash?"Leia rápido! Quantas palavras em 60s?":"Leia em voz alta! O caso fecha em 60 segundos.");
+  toast(cur.flash?`Leia rápido! Quantas palavras em ${DUR}s?`:`Leia em voz alta! O caso fecha em ${DUR}s.`);
 };
 function startTimer(){
   tStart=performance.now();resetRing();
@@ -864,58 +2102,62 @@ function startTimer(){
     const el=(performance.now()-tStart)/1000,left=Math.max(0,DUR-el);
     $("#tnum").textContent=Math.ceil(left);
     $("#ring").style.strokeDashoffset=(264*(1-left/DUR)).toFixed(1);
+    setFuseProgress($("#timerBox"),left/DUR);
     $("#timerBox").classList.toggle("warn",left<=10);
     if(left<=10&&Math.ceil(left)!==window._lt){window._lt=Math.ceil(left);if(left>0)tickSound();}
     if(left<=0){finishTimed(false);}
   },100);
 }
 function stopTimer(){if(timer){clearInterval(timer);timer=null;}playing=false;}
-function resetRing(){$("#tnum").textContent=DUR;$("#ring").style.strokeDashoffset=0;$("#timerBox").classList.remove("warn");}
+function resetRing(){
+  $("#tnum").textContent=DUR;$("#ring").style.strokeDashoffset=0;
+  $("#timerBox").classList.remove("warn","boom");setFuseProgress($("#timerBox"),1);
+  $("#paper")?.classList.remove("detonate");
+}
 let provaDone=false;
 function finishTimed(completedAll){
   if(!cur||!cur.timed||provaDone)return;
   provaDone=true;
   stopTimer();stopRec();
+  const expired=!completedAll;
+  $("#timerBox").classList.remove("warn");
+  if(expired){
+    setFuseProgress($("#timerBox"),0);$("#timerBox").classList.add("boom");detonateTarget($("#paper"));
+  }else $("#timerBox").classList.remove("boom");
   const elapsed=Math.min(DUR,(performance.now()-tStart)/1000)||DUR;
-  const errors=cur.flash?flashErrors:narrErrors;
+  const errors=cur.flash?flashErrors:narrativeErrorIndexes().size;
   // palavras CORRETAS = lidas − erros (precisão, como na prova real)
   const words=Math.max(0,(cur.flash?flashCount:pointer)-(cur.narr?errors:0));
   // total de palavras tentadas/lidas (corretas + erros) p/ taxa de precisão
   const lidasTotal=cur.flash?(flashCount+flashErrors):pointer;
-  // precisão oficial CAEd = corretas / total lido (×100). Fluente exige ≥90%.
+  // Precisão = corretas / total lido (×100).
   const precisao=lidasTotal>0?Math.round(words/lidasTotal*100):0;
-  // PCPM normalizado por minuto (vale p/ qualquer tempo, inclusive manual)
-  const pcpm=Math.round(words/Math.max(1,elapsed)*60);
-  const perfil=classify(pcpm,precisao);
+  // PCPM normalizado por minuto (vale p/ qualquer tempo, inclusive manual); teto sanitário
+  const pcpm=Math.min(250,Math.round(words/Math.max(5,elapsed)*60));
   const otimo=META[state.ano].otimo;
-  // Leitor Fluente (CAEd) = >65 PCPM E precisão ≥90%
-  const bateuPrecisao=precisao>=90;
-  const bateuPiso=pcpm>=65&&bateuPrecisao, bateuOtimo=pcpm>=otimo&&bateuPrecisao;
-  let earned=Math.max(1,Math.round(pcpm/15));if(bateuOtimo)earned+=3;else if(bateuPiso)earned+=1;
+  let earned=Math.max(1,Math.round(pcpm/15));
   if(pcpm>state.bestPcpm)state.bestPcpm=pcpm;
-  const metaMsg = bateuOtimo? `🏆 META DO ${state.ano} BATIDA! (alvo ${otimo}, precisão ${precisao}%)`
-    : bateuPiso? `✅ Leitor Fluente! Mire ${otimo} p/ o ${state.ano}.`
-    : (pcpm>=65&&!bateuPrecisao)? `⚡ Rápido (${pcpm}), mas precisão ${precisao}% — Fluente exige ≥90%. Leia com mais cuidado!`
-    : `💪 Continue treinando! Fluente = 65+ palavras com 90% de precisão.`;
+  const metaMsg=pcpm>=otimo?`🏆 Alvo interno de treino do ${state.ano} atingido.`
+    :`💪 Continue treinando. Esta missão isolada não determina perfil de leitor.`;
 
   const finishWin=(quiz)=>{
     let qline="";const quizStr=quiz?`${quiz.correct}/${quiz.total}`:"—";
     if(quiz){const bonus=quiz.correct*2;earned+=bonus;
       qline=`<div class="metaline">🧠 Interpretação: ${quiz.correct}/${quiz.total} certas <b style="color:var(--gold)">+${bonus} ⭐</b></div>`;}
     state.stars+=earned;state.done[cur.id]=true;
-    // grava no histórico (acompanhamento da turma)
-    state.history.push({nome:state.name||"Explorador(a)",avatar:state.avatar,ano:state.ano,
-      data:new Date().toISOString(),missao:cur.title,pcpm,perfil:perfil.label.replace(/[^\wÀ-ú ]/g,"").trim(),
+    // Treinos são registrados sem perfil. Somente a avaliação completa classifica.
+    state.history.push({tipo:"treino",nome:state.name||"Agente",avatar:state.avatar,ano:state.ano,
+      data:new Date().toISOString(),missao:"Treino: "+cur.title,pcpm,perfil:"Treino — sem perfil",
       lidas:words,erros:errors,prec:precisao,seg:Math.round(elapsed),quiz:quizStr});
     if(state.history.length>5000)state.history=state.history.slice(-5000);
     save();
     winSound();confetti();
     showWin({
-      title:cur.flash?"🎮 Gincana encerrada!":"⏱️ Prova de Campo concluída!",
+      title:cur.flash?"🎮 Gincana encerrada!":"⏱️ Treino de texto concluído!",
       icon:cur.ic,
-      reveal:(cur.flash||completedAll)?cur.reveal:"Tempo esgotado, explorador(a)! Veja seu resultado:",
+      reveal:(cur.flash||completedAll)?cur.reveal:"Tempo encerrado. Confira o resultado do treino:",
       body:`<div class="pcpmbig">${pcpm}</div><div class="sub">Palavras Corretas Por Minuto (PCPM)</div>
-        <div class="perfil" style="background:${perfil.bg};color:${perfil.fg}">${perfil.label}</div>
+        <div class="perfil" style="background:#3a4d7a;color:#fff">Treino — sem classificação</div>
         <div class="metaline">${metaMsg}</div>${qline}
         <div class="dims">
           <div class="dim"><b>${words}</b>corretas</div>
@@ -929,6 +2171,7 @@ function finishTimed(completedAll){
   };
   // leu o texto inteiro dentro do tempo → libera quiz de interpretação
   if(cur.narr && completedAll){ toast("Texto lido! Agora as perguntas do caso 🧠"); setTimeout(()=>showQuiz(finishWin),700); }
+  else if(expired)setTimeout(()=>finishWin(null),1150);
   else finishWin(null);
 }
 
@@ -965,33 +2208,29 @@ function showQuiz(done){
   }
   render();
 }
-// faixas oficiais CAEd/PAES — Fluente exige >65 PCPM E precisão ≥90%
-function classify(pcpm,precisao=100){
-  if(pcpm<=10)return{label:"Pré-leitor",bg:"#ff6b5e",fg:"#fff"};
-  if(pcpm<=64)return{label:"Leitor Iniciante",bg:"#ffd35b",fg:"#3a2300"};
-  if(precisao>=90)return{label:"Leitor Fluente 🏆",bg:"#6ee787",fg:"#063318"};
-  return{label:"Leitor Iniciante",bg:"#ffd35b",fg:"#3a2300"}; // veloz, mas precisão <90%
-}
-
 // ============ VOZ (SpeechRecognition pt-BR) ============
 const RecCtor=window.SpeechRecognition||window.webkitSpeechRecognition;
-let rec=null,recOn=false,heardTokens=[],consumed=0;
+let rec=null,recOn=false,heardTokens=[],consumed=0,lastVoiceText="";
 function voiceSupported(){return !!RecCtor;}
 $("#micBtn").onclick=()=>{recOn?stopRec():startRec();};
 function startRec(){
-  if(!voiceSupported()){$("#heard").textContent="Microfone/voz não suportado neste navegador. Toque nas palavras.";return;}
-  if(!playing && cur && !cur.timed)playing=true;
+  if(!voiceSupported()){$("#heard").textContent="Reconhecimento de voz não suportado neste navegador. Use ✓ Leu ou toque nas palavras.";return;}
+  if(!playing){$("#heard").textContent='Inicie a prova antes de ativar o microfone.';return;}
   stopRec();
   rec=new RecCtor();rec.lang="pt-BR";rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=4;
-  heardTokens=[];consumed=0;recOn=true;
+  heardTokens=[];consumed=0;lastVoiceText="";recOn=true;
   $("#micIco").classList.add("on");$("#micBtn").textContent="⏸ Parar";
+  $("#heard").textContent="🎙️ Microfone ligado. Leia; se não avançar, use ✓ Leu.";
+  rec.onaudiostart=()=>{$("#heard").textContent="🎙️ Áudio detectado. Continue lendo.";};
+  rec.onspeechstart=()=>{$("#heard").textContent="🎧 Voz detectada. Processando...";};
   rec.onresult=e=>{
     let interim="",finals=[];
     for(let i=e.resultIndex;i<e.results.length;i++){
       const r=e.results[i];const t=r[0]?.transcript||"";
       if(r.isFinal)finals.push(t);else interim+=" "+t;
     }
-    $("#heard").textContent="🎧 "+((interim||finals.join(" "))||"…").trim().slice(-50);
+    lastVoiceText=((interim||finals.join(" "))||"…").trim();
+    $("#heard").textContent="🎧 Ouvi: "+lastVoiceText.slice(-46);
     if(finals.length)finals.forEach(f=>heardTokens.push(...norm(f).split(/\s+/).filter(Boolean)));
     const interimTokens=norm(interim).split(/\s+/).filter(Boolean);
     if(cur.flash){
@@ -1003,37 +2242,50 @@ function startRec(){
     }
   };
   rec.onerror=ev=>{
-    $("#heard").textContent= ev.error==="not-allowed"?"Libere o microfone no navegador para ler por voz."
-      : ev.error==="no-speech"?"Sem som. Fale mais perto do microfone.":"Falha no microfone. Toque nas palavras.";
+    const fatal=["not-allowed","service-not-allowed","audio-capture"].includes(ev.error);
+    if(fatal){recOn=false;$("#micIco").classList.remove("on");$("#micBtn").textContent="🎙️ Falar";}
+    $("#heard").textContent= ev.error==="not-allowed"?"Microfone bloqueado. Libere no navegador ou use ✓ Leu/toque."
+      : ev.error==="service-not-allowed"?"Serviço de voz bloqueado. Use ✓ Leu ou toque nas palavras."
+      : ev.error==="audio-capture"?"Nenhum microfone encontrado. Use ✓ Leu ou toque nas palavras."
+      : ev.error==="no-speech"?"Não ouvi fala ainda. Fale mais perto ou use ✓ Leu."
+      :"Falha no microfone. Use ✓ Leu ou toque nas palavras.";
   };
   rec.onend=()=>{if(recOn&&playing){try{rec.start();}catch(e){}}else{$("#micIco").classList.remove("on");$("#micBtn").textContent="🎙️ Falar";}};
-  try{rec.start();}catch(e){}
+  try{rec.start();}catch(e){recOn=false;$("#micIco").classList.remove("on");$("#micBtn").textContent="🎙️ Falar";
+    $("#heard").textContent="Não foi possível iniciar o microfone. Use os botões de correção manual.";}
 }
 function stopRec(){recOn=false;if(rec){try{rec.onend=null;rec.stop();}catch(e){}}$("#micIco").classList.remove("on");$("#micBtn").textContent="🎙️ Falar";}
 // NARRATIVA: re-alinha do zero todo evento. Pula até 3 palavras p/ não travar.
-// retorna {p:posição alcançada, skips:palavras puladas=erros de precisão}
+// retorna a posição alcançada e os índices pulados, usados como erros de precisão
 function alignTo(tokens){
-  let p=0,c=0,guard=0,skips=0;
+  let p=0,c=0,guard=0,skipped=[];
   while(p<total && c<tokens.length && guard<2000){
     guard++;
     let jump=-1,used=0;
-    for(let la=0; la<=3 && p+la<total; la++){
+    // Lookahead up to 12 words to avoid getting stuck if microfone misses a phrase
+    for(let la=0; la<=12 && p+la<total; la++){
       const exp=cur.data[p+la];
-      for(let k=0;k<6 && c+k<tokens.length;k++){
+      for(let k=0;k<8 && c+k<tokens.length;k++){
         if(wordMatches(exp,[tokens[c+k]])){jump=la;used=k+1;break;}
       }
       if(jump>=0)break;
     }
-    if(jump>=0){if(jump>0)skips+=jump;p+=jump+1;c+=used;} else {c++;}
+    if(jump>=0){
+      for(let i=0;i<jump;i++)skipped.push(p+i);
+      p+=jump+1;c+=used;
+    } else {c++;}
   }
-  return {p,skips};
+  return {p,skipped};
 }
 function setNarrPointer(r){
-  narrErrors=Math.max(narrErrors,r.skips);
   const P=r.p;
-  if(!playing||P<=pointer)return;     // só avança, nunca volta
+  if(!playing||P<pointer)return;
+  narrVoiceErrors=new Set(r.skipped||[]);
+  syncNarrativeErrorMarks();
+  if(P===pointer)return;
   const E=els();
   for(let i=pointer;i<P && i<total;i++){if(E[i]){E[i].classList.add("read");E[i].classList.remove("cur");}}
+  syncNarrativeErrorMarks();
   if(E[P-1])burst(E[P-1]);
   pointer=Math.min(P,total);popSound(3);
   markCurrent();updateProgress();

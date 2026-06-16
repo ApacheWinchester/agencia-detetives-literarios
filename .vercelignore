@@ -1,3 +1,5 @@
 pdf/
 .git/
+node_modules/
+_flowtest.cjs
 *.log
