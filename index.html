@@ -519,6 +519,9 @@
     box-shadow:inset -9px -11px 15px rgba(0,0,0,.34),0 15px 28px rgba(0,0,0,.22);margin:18px 0 15px}
   .official-timer::before{top:-13px}
   .official-timer::after{top:-19px}
+  /* cronômetro/bomba sempre à vista: fixa no topo à direita enquanto rola a lista/texto */
+  #officialTime{position:sticky;top:10px;z-index:40;align-self:flex-end;margin:0 2px 14px}
+  #timerBox{position:sticky;top:10px;z-index:40;align-self:flex-end}
   .paper.detonate,.official-sheet.detonate{animation:caseShake .68s ease both;overflow:hidden}
   .paper.detonate::before,.official-sheet.detonate::before{
     content:"💥  BOOM!";position:absolute;inset:0;z-index:20;display:grid;place-items:center;pointer-events:none;
@@ -926,39 +929,153 @@ const TEXT_BANK=[
 ];
 
 // Instrumento pedagógico autoral inspirado na estrutura pública de avaliações de fluência.
-// As listas, o texto e as questões abaixo foram produzidos especificamente para este projeto.
+// Bancos graduados por ano (2º ao 5º): palavras, itens de decodificação e textos com perguntas.
 const OFFICIAL_DURATION=60;
-const OFFICIAL_WORDS=[
-  "sol","casa","bola","mesa","pato","gato","dedo","mapa","livro","escola",
-  "janela","menino","menina","sapato","panela","banana","boneca","camisa","cavalo","pipoca",
-  "chave","chuva","folha","ninho","milho","telhado","jardim","coelho","queijo","peixe",
-  "praia","braço","flor","grama","fruta","bloco","trem","prato","estrela","cravo",
-  "amigo","família","cidade","sorriso","trabalho","domingo","caderno","mochila","tesoura","desenho",
-  "história","segredo","floresta","planeta","biblioteca","palavra","aventura","coragem","surpresa","relógio",
-  "pássaro","árvore","lâmpada","ônibus","música","açúcar","xícara","coração","fósforo","máquina",
-  "médico","brinquedo","travesseiro","borboleta","fotografia","computador","chocolate","bicicleta","descoberta","investigador"
-];
-const OFFICIAL_UNKNOWN=[
-  "mavelo","tupira","fenaco","jolume","baripo","clenato","vurela","ponida","grefe","daluco",
-  "ximara","sovito","branelo","quifeno","zupala","dravico","nelume","fosira","plunato","carevo",
-  "bregui","lumepa","trofina","valeco","jiruma","quessal","prenito","zolena","fradume","bitala",
-  "clovena","nupiro","garrume","telavo","bronico","xelura","dafino","vopela","crisato","juremi",
-  "flaneco","pobira","grunelo","chadiva","limoro","trasume","bequira","zofano","prileto","dunavi",
-  "calume","frevito","guinara","lesapo","motrila","quivaro","rufena","siblume","tefaro","vianeco"
-];
-const OFFICIAL_TEXT=`Na segunda-feira, a biblioteca da escola recebeu uma caixa sem remetente. Dentro dela havia um livro azul, uma lupa de papel e um bilhete: “Encontrem a história que perdeu o final.” Sofia chamou Ravi e os dois começaram a investigação. Primeiro, observaram a capa. Depois, procuraram pistas entre as páginas. Na página vinte, descobriram uma folha dobrada com o desenho de uma ponte, três estrelas e uma seta apontando para o pátio.
+const OFFICIAL_BY_YEAR={
+  "2º ano":{
+    words:["sol","casa","bola","mesa","pato","gato","dedo","mapa","livro","escola",
+      "janela","menino","menina","sapato","panela","banana","boneca","camisa","cavalo","pipoca",
+      "chave","chuva","folha","ninho","milho","telhado","jardim","coelho","queijo","peixe",
+      "praia","braço","flor","grama","fruta","bloco","trem","prato","estrela","cravo",
+      "amigo","família","cidade","sorriso","trabalho","domingo","caderno","mochila","tesoura","desenho",
+      "história","segredo","floresta","planeta","biblioteca","palavra","aventura","coragem","surpresa","relógio",
+      "pássaro","árvore","lâmpada","ônibus","música","açúcar","xícara","coração","fósforo","máquina",
+      "médico","brinquedo","travesseiro","borboleta","fotografia","computador","chocolate","bicicleta","descoberta","investigador"],
+    unknown:["mavelo","tupira","fenaco","jolume","baripo","clenato","vurela","ponida","grefe","daluco",
+      "ximara","sovito","branelo","quifeno","zupala","dravico","nelume","fosira","plunato","carevo",
+      "bregui","lumepa","trofina","valeco","jiruma","quessal","prenito","zolena","fradume","bitala",
+      "clovena","nupiro","garrume","telavo","bronico","xelura","dafino","vopela","crisato","juremi",
+      "flaneco","pobira","grunelo","chadiva","limoro","trasume","bequira","zofano","prileto","dunavi",
+      "calume","frevito","guinara","lesapo","motrila","quivaro","rufena","siblume","tefaro","vianeco"],
+    texts:[
+      {title:"O MISTÉRIO DA ÚLTIMA PÁGINA",
+       text:`Na segunda-feira, a biblioteca da escola recebeu uma caixa sem remetente. Dentro dela havia um livro azul, uma lupa de papel e um bilhete: “Encontrem a história que perdeu o final.” Sofia chamou Ravi e os dois começaram a investigação. Primeiro, observaram a capa. Depois, procuraram pistas entre as páginas. Na página vinte, descobriram uma folha dobrada com o desenho de uma ponte, três estrelas e uma seta apontando para o pátio.
 No recreio, os amigos seguiram o mapa. Perto da jabuticabeira, encontraram outra mensagem escondida sob uma pedra. Ela dizia que o final estava onde as palavras descansavam. Ravi pensou na estante de devoluções. Sofia correu até lá e achou um envelope dentro de um dicionário antigo.
-O envelope guardava a última página do livro. A turma reuniu as partes, leu a história completa e registrou a descoberta no diário da biblioteca. No fim, todos perceberam que investigar também era uma forma divertida de ler com atenção.`;
-const OFFICIAL_QUESTIONS=[
-  {q:"O que chegou à biblioteca sem identificação do remetente?",opts:["Uma caixa","Uma mochila","Uma carta","Não respondeu"],a:0},
-  {q:"Onde Sofia encontrou o envelope com a última página?",opts:["Dentro de um dicionário antigo","Debaixo da ponte","Na caixa de devoluções","Não respondeu"],a:0},
-  {q:"Qual é a ideia principal do texto?",opts:["Duas crianças resolvem um mistério por meio da leitura","A turma organiza uma festa na biblioteca","Ravi perde um livro durante o recreio","Não respondeu"],a:0}
-];
-const OFFICIAL_TASKS=[
-  {key:"words",title:"Tarefa 1 — Leitura de palavras",hint:"Leia da esquerda para a direita, linha por linha.",items:OFFICIAL_WORDS},
-  {key:"unknown",title:"Tarefa 2 — Itens de decodificação",hint:"Leia da esquerda para a direita. Os itens são inventados e não exigem conhecimento de significado.",items:OFFICIAL_UNKNOWN},
-  {key:"text",title:"Tarefa 3 — Leitura de texto",hint:"Leia o texto em voz alta até o tempo terminar.",text:OFFICIAL_TEXT}
-];
+O envelope guardava a última página do livro. A turma reuniu as partes, leu a história completa e registrou a descoberta no diário da biblioteca. No fim, todos perceberam que investigar também era uma forma divertida de ler com atenção.`,
+       questions:[
+         {q:"O que chegou à biblioteca sem identificação do remetente?",opts:["Uma caixa","Uma mochila","Uma carta","Não respondeu"],a:0},
+         {q:"Onde Sofia encontrou o envelope com a última página?",opts:["Dentro de um dicionário antigo","Debaixo da ponte","Na caixa de devoluções","Não respondeu"],a:0},
+         {q:"Qual é a ideia principal do texto?",opts:["Duas crianças resolvem um mistério por meio da leitura","A turma organiza uma festa na biblioteca","Ravi perde um livro durante o recreio","Não respondeu"],a:0}
+       ]},
+      {title:"O GATINHO DO TELHADO",
+       text:`No sábado de manhã, Lia ouviu um miado fininho perto da janela. Era um gatinho cinza, preso no telhado da casa ao lado. Ele estava com medo e não sabia descer. Lia chamou o avô, que pegou uma escada de madeira. Com calma, os dois subiram um degrau de cada vez.
+O avô falava baixinho para acalmar o bichano. Lia segurou a escada com força. Aos poucos, o gatinho foi chegando mais perto. Quando sentiu a mão macia da menina, ele se deixou pegar.
+Em casa, o gatinho ganhou leite morno e uma caixa com um cobertor. Lia sorriu feliz. Ela aprendeu que a paciência e o cuidado ajudam a resolver até os problemas mais difíceis.`,
+       questions:[
+         {q:"Onde o gatinho estava preso?",opts:["No telhado da casa ao lado","Dentro de um armário","Embaixo do carro","Não respondeu"],a:0},
+         {q:"Quem ajudou Lia a resgatar o gatinho?",opts:["O avô","A professora","O vizinho","Não respondeu"],a:0},
+         {q:"O que a história ensina?",opts:["A paciência e o cuidado ajudam a resolver problemas","Gatos gostam de leite frio","Telhados são lugares seguros","Não respondeu"],a:0}
+       ]}
+    ]
+  },
+  "3º ano":{
+    words:["ponte","nuvem","cobra","trilho","escada","girafa","cabide","tomate","cenoura","abacaxi",
+      "cachorro","martelo","violão","pescador","montanha","ventania","tartaruga","calendário","ferramenta","cobertor",
+      "liberdade","amizade","planeta","oceano","deserto","castelo","pirata","tesouro","bússola","âncora",
+      "farol","gaivota","caverna","fogueira","cabana","trilha","relâmpago","cachoeira","jacaré","formiga",
+      "abelha","colmeia","semente","raízes","girassol","passarinho","brincadeira","companheiro","esperança","verdade"],
+    unknown:["tralo","brenco","princa","clavi","drumo","grela","frespo","plomi","brunca","tringo",
+      "churo","mafte","vando","prando","gluno","blesta","crinta","dralo","espro","franico",
+      "plomeco","trebol","grunta","clavem","drispo","brelta","pronfe","glimar","trasco","plendo",
+      "brufa","clenta","drilbo","grespa","frunto","plabre","trinco","blunca","drevil","espralo"],
+    texts:[
+      {title:"O SEGREDO DA HORTA",
+       text:`A turma do terceiro ano decidiu cuidar de uma horta no fundo da escola. Cada aluno ficou responsável por um canteiro. Pedro plantou cenouras, Manu cuidou dos tomates e Rafa escolheu os girassóis. Todas as manhãs, antes da aula, eles regavam as sementes com água limpa.
+No começo, nada acontecia, e alguns colegas ficaram impacientes. A professora explicou que as plantas crescem devagar, debaixo da terra, antes de aparecerem. Era preciso ter paciência e continuar cuidando todos os dias.
+Depois de três semanas, os primeiros brotos verdes surgiram. A horta ficou cheia de vida, com folhas, flores e até uma joaninha curiosa. A turma comemorou a colheita e dividiu os legumes com as outras salas. Eles entenderam que o trabalho em equipe e o cuidado diário trazem bons resultados.`,
+       questions:[
+         {q:"O que a turma decidiu cuidar no fundo da escola?",opts:["De uma horta","De um aquário","De uma biblioteca","Não respondeu"],a:0},
+         {q:"Por que alguns colegas ficaram impacientes no começo?",opts:["Porque as plantas demoravam a aparecer","Porque faltou água","Porque ninguém ajudava","Não respondeu"],a:0},
+         {q:"O que a turma aprendeu com a horta?",opts:["O trabalho em equipe e o cuidado diário trazem bons resultados","Que plantar é muito fácil","Que legumes nascem rápido","Não respondeu"],a:0}
+       ]},
+      {title:"A BÚSSOLA DO VOVÔ",
+       text:`Theo ganhou do avô uma bússola antiga, guardada numa caixa de madeira. O avô contou que aquela bússola já tinha viajado por muitos lugares e sempre apontava para o norte. No domingo, os dois resolveram explorar a trilha perto do rio.
+Pelo caminho, Theo aprendeu a seguir a agulha da bússola e a observar as marcas da natureza. Viram pegadas de animais, ouviram o canto dos pássaros e encontraram uma pequena cachoeira escondida entre as pedras.
+Na volta, o céu escureceu e a trilha ficou confusa. Foi então que a bússola ajudou os dois a encontrar o rumo certo de casa. Theo guardou a bússola com carinho e prometeu cuidar daquele presente tão especial para sempre.`,
+       questions:[
+         {q:"O que Theo ganhou do avô?",opts:["Uma bússola antiga","Um relógio de ouro","Um mapa rasgado","Não respondeu"],a:0},
+         {q:"O que a bússola sempre apontava?",opts:["Para o norte","Para o rio","Para a cachoeira","Não respondeu"],a:0},
+         {q:"Como a bússola ajudou na volta para casa?",opts:["Ajudou a encontrar o rumo certo quando a trilha ficou confusa","Iluminou o caminho","Avisou sobre a chuva","Não respondeu"],a:0}
+       ]}
+    ]
+  },
+  "4º ano":{
+    words:["investigação","laboratório","experimento","microscópio","gravidade","eletricidade","engrenagem","território","civilização","arqueologia",
+      "mamífero","predador","camuflagem","metamorfose","fotossíntese","atmosfera","constelação","telescópio","satélite","relâmpago",
+      "tempestade","correnteza","cordilheira","vulcão","terremoto","manuscrito","pergaminho","caligrafia","vocabulário","parágrafo",
+      "narrativa","personagem","mistério","suspense","estratégia","raciocínio","conclusão","evidência","observação","curiosidade",
+      "natureza","equilíbrio","resistência","velocidade","aventureiro","descobrimento","biblioteca","experiência","ferramenta","conhecimento"],
+    unknown:["bramaço","prulido","trelinco","fanopre","glumido","zarpeste","blicanto","drufalho","cretipo","plonibre",
+      "vandelço","esprudo","quilarpe","nostralho","brutemil","cranholfe","plendraco","trasundo","grelbico","frenistal",
+      "clavorne","drupelho","brincolfa","plomastre","tregundo","franholpe","blistrea","drevolta","grunfila","plendoze",
+      "crastilho","brenfaldo","tronvelpi","glabreco","fruspano","clendrita","brelanto","drimaspe","plonfarte","tregilho"],
+    texts:[
+      {title:"EXPEDIÇÃO AO RIO ESCONDIDO",
+       text:`A turma do quarto ano participou de uma expedição científica organizada pela escola. O objetivo era estudar um rio escondido na mata, conhecido apenas pelos moradores mais antigos da região. Antes de partir, os alunos prepararam cadernos de campo, lupas e garrafas para coletar amostras de água.
+Durante a caminhada, a professora explicou como a floresta protege as nascentes e por que a água limpa é tão importante para os animais e para as pessoas. Os estudantes observaram pegadas, identificaram pássaros e anotaram tudo o que viam.
+Ao chegar ao rio, perceberam que a água estava cristalina e cheia de pequenos peixes. No entanto, encontraram lixo plástico preso entre as pedras. A turma recolheu o material e decidiu criar um projeto para conscientizar a comunidade. De volta à escola, apresentaram suas descobertas e propuseram soluções para preservar o rio escondido.`,
+       questions:[
+         {q:"Qual era o objetivo da expedição?",opts:["Estudar um rio escondido na mata","Plantar árvores no pátio","Visitar um museu da cidade","Não respondeu"],a:0},
+         {q:"O que a turma encontrou preso entre as pedras do rio?",opts:["Lixo plástico","Moedas antigas","Um barco afundado","Não respondeu"],a:0},
+         {q:"O que os alunos decidiram fazer depois da descoberta?",opts:["Criar um projeto para conscientizar a comunidade","Esquecer o assunto","Mudar de escola","Não respondeu"],a:0}
+       ]},
+      {title:"O ROBÔ DA FEIRA DE CIÊNCIAS",
+       text:`Para a feira de ciências, Beatriz e Caio decidiram construir um pequeno robô capaz de seguir uma linha desenhada no chão. Eles pesquisaram em livros, assistiram a vídeos e desenharam vários planos antes de começar. A montagem exigiu paciência: fios, sensores e engrenagens precisavam ficar no lugar certo.
+Na primeira tentativa, o robô girava sem parar e não seguia a linha. Em vez de desistir, a dupla analisou cada erro e ajustou os sensores. Anotaram cada mudança no caderno, como verdadeiros cientistas fazem em seus experimentos.
+No dia da feira, o robô finalmente percorreu todo o trajeto sem sair da linha. Os colegas aplaudiram, e os jurados elogiaram a dedicação dos dois. Beatriz e Caio entenderam que errar faz parte de aprender e que a persistência transforma um projeto difícil em uma grande conquista.`,
+       questions:[
+         {q:"O que Beatriz e Caio construíram para a feira?",opts:["Um robô que segue uma linha","Um foguete de papel","Um vulcão de argila","Não respondeu"],a:0},
+         {q:"O que a dupla fez quando o robô não funcionou na primeira tentativa?",opts:["Analisou os erros e ajustou os sensores","Desistiu do projeto","Trocou de tema","Não respondeu"],a:0},
+         {q:"Qual é a mensagem principal do texto?",opts:["A persistência transforma um projeto difícil em conquista","Robôs são fáceis de montar","Ciência não dá trabalho","Não respondeu"],a:0}
+       ]}
+    ]
+  },
+  "5º ano":{
+    words:["responsabilidade","sustentabilidade","biodiversidade","transformação","consequência","independência","democracia","cidadania","solidariedade","perseverança",
+      "determinação","imaginação","criatividade","conhecimento","experiência","consciência","linguagem","comunicação","tecnologia","inovação",
+      "exploração","navegação","horizonte","universo","galáxia","fenômeno","equilíbrio","resistência","aceleração","temperatura",
+      "arquitetura","engenharia","matemática","geografia","literatura","ortografia","metáfora","personagem","argumento","conclusão",
+      "investigação","descoberta","civilização","monumento","patrimônio","diversidade","convivência","cooperação","generosidade","sabedoria"],
+    unknown:["salgreto","fontaço","garnilho","peldoco","tarvinho","vesplado","churaço","mafrelo","plendiço","quirbade",
+      "bremoldo","troldeco","calvunho","prindola","dasturbe","lambeco","festrido","garbulo","pelisco","traldeço",
+      "esculido","mafreque","plendaço","brenaspe","troldime","crastunfe","blendarvo","triscampo","grofelante","plundarque",
+      "frescantil","dravolente","brisalmo","glentaribo","prondesvil","clarstefo","brunfaldre","trolfispe","gandrelpo","vesturnalbo"],
+    texts:[
+      {title:"A CARTA DO FAROL",
+       text:`Quando a família de Helena se mudou para a vila de pescadores, ela descobriu um velho farol abandonado no alto de um morro. Curiosa, subiu a trilha íngreme e encontrou, dentro de uma fenda na parede de pedra, uma carta amarelada e cuidadosamente dobrada. A mensagem havia sido escrita por um antigo faroleiro, décadas antes.
+Na carta, o faroleiro contava como acendia a lâmpada todas as noites para guiar os barcos em meio à neblina. Ele descrevia as tempestades, a solidão e a alegria de ver as embarcações chegarem em segurança ao porto. Dizia também que cuidar do farol era um modo de cuidar das pessoas que nem sequer conhecia.
+Comovida, Helena mostrou a carta à comunidade. Juntos, os moradores decidiram restaurar o farol e transformá-lo em um pequeno museu. A história do faroleiro, antes esquecida, passou a inspirar todos a valorizar o cuidado com o próximo e a memória do lugar onde viviam.`,
+       questions:[
+         {q:"O que Helena encontrou dentro da fenda na parede do farol?",opts:["Uma carta amarelada","Um baú de moedas","Uma lâmpada quebrada","Não respondeu"],a:0},
+         {q:"Por que o faroleiro acendia a lâmpada todas as noites?",opts:["Para guiar os barcos em meio à neblina","Para iluminar a própria casa","Para afastar os pássaros","Não respondeu"],a:0},
+         {q:"O que a comunidade decidiu fazer com o farol?",opts:["Restaurá-lo e transformá-lo em museu","Demoli-lo","Vendê-lo a outra cidade","Não respondeu"],a:0}
+       ]},
+      {title:"O DIÁRIO DA NAVEGADORA",
+       text:`Na biblioteca da escola, Otávio encontrou um livro diferente dos demais: era o diário de uma navegadora que cruzara oceanos havia mais de cem anos. As páginas, escritas à mão, registravam mapas, ventos, estrelas e as decisões difíceis tomadas em cada viagem.
+A navegadora contava que aprendera a orientar o barco observando o céu e confiando em seus cálculos. Quando os instrumentos falhavam, era a coragem e o conhecimento acumulado que a ajudavam a seguir adiante. Ela escrevia que cada erro no mar ensinava uma lição valiosa para a próxima travessia.
+Inspirado por aquelas palavras, Otávio percebeu que estudar também é uma forma de navegar pelo desconhecido. Decidiu criar o próprio diário, anotando dúvidas, descobertas e metas. Compreendeu que, assim como a navegadora, ele poderia traçar a própria rota com curiosidade, esforço e determinação.`,
+       questions:[
+         {q:"Que livro diferente Otávio encontrou na biblioteca?",opts:["O diário de uma navegadora","Um atlas de geografia","Uma revista de ciências","Não respondeu"],a:0},
+         {q:"Como a navegadora se orientava quando os instrumentos falhavam?",opts:["Com coragem e o conhecimento acumulado","Pedindo ajuda por rádio","Esperando parar a tempestade","Não respondeu"],a:0},
+         {q:"O que Otávio decidiu fazer ao se inspirar no diário?",opts:["Criar o próprio diário de dúvidas e descobertas","Parar de estudar","Vender o livro","Não respondeu"],a:0}
+       ]}
+    ]
+  }
+};
+function officialBank(){return OFFICIAL_BY_YEAR[state.ano]||OFFICIAL_BY_YEAR["2º ano"];}
+function pickOfficialText(bank){return bank.texts[Math.floor(Math.random()*bank.texts.length)];}
+// Monta as 3 tarefas da sessão a partir do banco do ano e de um texto sorteado.
+function buildOfficialTasks(){
+  const bank=officialBank(),textModel=pickOfficialText(bank);
+  return{
+    tasks:[
+      {key:"words",title:"Tarefa 1 — Leitura de palavras",hint:"Leia da esquerda para a direita, linha por linha.",items:bank.words},
+      {key:"unknown",title:"Tarefa 2 — Itens de decodificação",hint:"Leia da esquerda para a direita. Os itens são inventados e não exigem conhecimento de significado.",items:bank.unknown},
+      {key:"text",title:"Tarefa 3 — Leitura de texto",hint:"Leia o texto em voz alta até o tempo terminar.",text:textModel.text,textTitle:textModel.title}
+    ],
+    questions:textModel.questions
+  };
+}
 
 const MISSIONS = [
   {id:0, ic:"⌁", title:"Radar de Palavras", hint:"Leia a palavra! A próxima aparece sozinha.",
@@ -1121,35 +1238,36 @@ function renderOfficialSteps(active=-1){
 function openOfficialIntro(){
   stopRec();stopTimer();stopOfficialSession();officialSession=null;
   renderOfficialSteps(-1);
+  const bank=officialBank();
   $("#officialBody").innerHTML=`<div class="official-result" style="text-align:left">
     <h1 style="font-size:28px">📋 Avaliação completa de fluência</h1>
-    <p><b>Instrumento pedagógico autoral:</b> destinado ao 2º ano do Ensino Fundamental e inspirado na estrutura pública de avaliações de fluência.</p>
+    <p><b>Instrumento pedagógico autoral:</b> material graduado para o <b>${state.ano}</b> do Ensino Fundamental, inspirado na estrutura pública de avaliações de fluência. Palavras, itens de decodificação e textos são selecionados conforme o ano escolhido.</p>
     <div class="official-note" style="color:#222;background:#eef4f8;border-color:#c5d4e2">
       <b>Como funciona:</b><br>
-      1. Leitura de 80 palavras por 60 segundos.<br>
-      2. Leitura de 60 itens autorais de decodificação por 60 segundos.<br>
-      3. Leitura de texto por 60 segundos.<br>
+      1. Leitura de ${bank.words.length} palavras por 60 segundos.<br>
+      2. Leitura de ${bank.unknown.length} itens autorais de decodificação por 60 segundos.<br>
+      3. Leitura de um texto sorteado por 60 segundos.<br>
       4. Revisão dos acertos e erros e três perguntas de compreensão.<br><br>
-      O perfil é calculado <b>somente depois das três tarefas</b>. A tela mostra a lista/texto completo, como material de aplicação; as atividades de uma palavra por vez ficam apenas nos treinos. O microfone grava o áudio localmente quando permitido; a correção informada pelo aplicador é o dado usado no resultado.
+      O perfil é calculado <b>somente depois das três tarefas</b>. A tela mostra a lista/texto completo, como material de aplicação; as atividades de uma palavra por vez ficam apenas nos treinos. O microfone grava o áudio localmente quando permitido e encerra a tarefa ao detectar a última palavra; a correção informada pelo aplicador é o dado usado no resultado.
     </div>
-    <p><b>Aluno(a):</b> ${esc(state.name||"Agente")}</p>
+    <p><b>Aluno(a):</b> ${esc(state.name||"Agente")} · <b>Ano:</b> ${state.ano}</p>
     <div class="row" style="gap:10px">
       <button class="btn teal" id="officialBegin">Começar avaliação ▶</button>
       <button class="btn ghost" id="officialTestMicBtn" style="border-color:var(--teal); color:var(--teal)">🎤 Testar Microfone</button>
     </div>
   </div>`;
   show("#s-official");
-  $("#officialBegin").onclick=()=>{officialSession={startedAt:new Date().toISOString(),taskIndex:0,results:[],quiz:[],liveLast:0,audioUrls:[]};renderOfficialTask(0);};
+  $("#officialBegin").onclick=()=>{const built=buildOfficialTasks();officialSession={startedAt:new Date().toISOString(),taskIndex:0,results:[],quiz:[],liveLast:0,audioUrls:[],tasks:built.tasks,questions:built.questions,ano:state.ano};renderOfficialTask(0);};
   $("#officialTestMicBtn").onclick=openMicTest;
 }
 function officialWords(task){
   if(task.items)return`<div class="official-grid">${task.items.map((w,i)=>`<span class="official-word" data-n="${i+1}">${esc(w)}</span>`).join("")}</div>`;
   const words=task.text.split(/\s+/);
-  return`<h2>O MISTÉRIO DA ÚLTIMA PÁGINA</h2><div class="official-text">${words.map((w,i)=>`<span class="ow" data-n="${i+1}">${esc(w)}</span> `).join("")}</div>`;
+  return`<h2>${esc(task.textTitle||"Texto")}</h2><div class="official-text">${words.map((w,i)=>`<span class="ow" data-n="${i+1}">${esc(w)}</span> `).join("")}</div>`;
 }
 function renderOfficialTask(index){
   stopOfficialSession();
-  const task=OFFICIAL_TASKS[index];officialSession.taskIndex=index;officialSession.liveLast=0;officialSession.running=false;
+  const task=officialSession.tasks[index];officialSession.taskIndex=index;officialSession.liveLast=0;officialSession.running=false;
   renderOfficialSteps(index);
   $("#officialBody").innerHTML=`<div class="mission-head">
       <div style="color:var(--gold);font-weight:bold">Avaliação completa · ${esc(state.name||"Agente")}</div>
@@ -1210,7 +1328,7 @@ function startOfficialSpeechRecognition(){
   let officialHeardTokens = [];
   officialRecOn = true;
   officialSession.voiceError = "";
-  const task = OFFICIAL_TASKS[officialSession.taskIndex];
+  const task = officialSession.tasks[officialSession.taskIndex];
   const wordsList = task.items || task.text.split(/\s+/);
   const totalWords = wordsList.length;
   officialRec.onresult = e => {
@@ -1234,6 +1352,11 @@ function startOfficialSpeechRecognition(){
         x.classList.toggle("reached", Number(x.dataset.n) <= officialSession.liveLast);
       });
       $("#officialStatus").textContent=`🎙️ Apoio do microfone marcou até ${officialSession.liveLast}. Confirme na revisão antes de salvar.`;
+      // chegou na última palavra → encerra a tarefa automaticamente (não precisa clicar)
+      if(officialSession.liveLast >= totalWords && officialSession.running){
+        $("#officialStatus").textContent=`🎙️ Última palavra (${totalWords}) detectada. Encerrando a tarefa…`;
+        finishOfficialClock();
+      }
     }
   };
   officialRec.onerror = ev => {
@@ -1295,8 +1418,8 @@ async function startOfficialClock(){
   btn.disabled=false;
   btn.onclick=()=>finishOfficialClock();
 
-  // Start Speech Recognition for official task 1 (words) and task 3 (text)
-  if(voiceSupported() && (officialSession.taskIndex === 0 || officialSession.taskIndex === 2)){
+  // Reconhecimento de voz em TODAS as tarefas (palavras, decodificação e texto)
+  if(voiceSupported()){
     startOfficialSpeechRecognition();
   }
 
@@ -1374,7 +1497,7 @@ function reviewError(message,el){
   toast(message);
 }
 function showOfficialReview(){
-  const index=officialSession.taskIndex,task=OFFICIAL_TASKS[index],max=task.items?.length||task.text.split(/\s+/).length;
+  const index=officialSession.taskIndex,task=officialSession.tasks[index],max=task.items?.length||task.text.split(/\s+/).length;
   renderOfficialSteps(index);
   if(index<2){
     const last=Math.min(max,officialSession.liveLast||0);
@@ -1404,7 +1527,7 @@ function showOfficialReview(){
   $("#saveOfficialReview").onclick=saveOfficialReview;
 }
 function saveOfficialReview(){
-  const index=officialSession.taskIndex,task=OFFICIAL_TASKS[index],max=task.items?.length||task.text.split(/\s+/).length;
+  const index=officialSession.taskIndex,task=officialSession.tasks[index],max=task.items?.length||task.text.split(/\s+/).length;
   $("#officialReviewError").textContent="";
   const lastCheck=reviewNumber("offLast","Última palavra",0,max);
   if(!lastCheck.ok){reviewError(lastCheck.message,lastCheck.el);return;}
@@ -1434,9 +1557,10 @@ function saveOfficialReview(){
 }
 function showOfficialComprehension(index){
   renderOfficialSteps(3);
-  if(index>=OFFICIAL_QUESTIONS.length){finishOfficialAssessment();return;}
-  const item=OFFICIAL_QUESTIONS[index];
-  $("#officialBody").innerHTML=`<div class="review-form"><h2>Compreensão ${index+1} de ${OFFICIAL_QUESTIONS.length}</h2>
+  const questions=officialSession.questions;
+  if(index>=questions.length){finishOfficialAssessment();return;}
+  const item=questions[index];
+  $("#officialBody").innerHTML=`<div class="review-form"><h2>Compreensão ${index+1} de ${questions.length}</h2>
     <p style="font-size:20px;text-align:center">${item.q}</p><div class="qopts" id="officialOpts"></div></div>`;
   const box=$("#officialOpts");
   item.opts.forEach((text,i)=>{
@@ -1466,14 +1590,15 @@ function officialRecommendation(profile,level){
 }
 function finishOfficialAssessment(){
   const result=calculateOfficialProfile(),words=officialSession.results[0],unknown=officialSession.results[1],text=officialSession.results[2];
-  const quizCorrect=officialSession.quiz.filter(Boolean).length;
+  const quizCorrect=officialSession.quiz.filter(Boolean).length,quizTotal=officialSession.questions.length;
+  const wordsMax=officialSession.tasks[0].items.length,unknownMax=officialSession.tasks[1].items.length;
   // piso de tempo evita PCPM absurdo se a leitura for concluída muito cedo; teto sanitário em 250
   const textElapsed=Math.max(5,text.elapsed||60);
   const pcpm=Math.min(250,textElapsed<59.5?Math.round(text.correct/textElapsed*60):text.correct);
-  const assessment={tipo:"avaliacao_completa",data:new Date().toISOString(),nome:state.name||"Agente",avatar:state.avatar,ano:"2º ano",
+  const assessment={tipo:"avaliacao_completa",data:new Date().toISOString(),nome:state.name||"Agente",avatar:state.avatar,ano:officialSession.ano||state.ano,
     perfil:result.profile,nivelPre:result.preLevel,palavrasCorretas:words.correct,desconhecidasCorretas:unknown.correct,
     textoLidas:text.last,textoCorretas:text.correct,textoErros:text.errors,prec:text.precision,prosodia:text.prosody,
-    quiz:`${quizCorrect}/${OFFICIAL_QUESTIONS.length}`};
+    quiz:`${quizCorrect}/${quizTotal}`};
   state.assessments.push(assessment);
   state.history.push({tipo:"avaliacao_completa",nome:assessment.nome,avatar:assessment.avatar,ano:assessment.ano,data:assessment.data,
     missao:"Avaliação completa (3 tarefas)",pcpm:pcpm,perfil:assessment.perfil,lidas:text.correct,erros:text.errors,
@@ -1483,8 +1608,8 @@ function finishOfficialAssessment(){
     <h1 style="font-size:28px">Resultado da avaliação completa</h1>
     <div class="profile" style="background:${result.color}">${result.profile}${result.preLevel?` · Nível ${result.preLevel}`:""}</div>
     <div class="official-metrics">
-      <div class="official-metric"><b>${words.correct}/80</b>palavras corretas</div>
-      <div class="official-metric"><b>${unknown.correct}/60</b>itens de decodificação</div>
+      <div class="official-metric"><b>${words.correct}/${wordsMax}</b>palavras corretas</div>
+      <div class="official-metric"><b>${unknown.correct}/${unknownMax}</b>itens de decodificação</div>
       <div class="official-metric"><b>${text.correct}</b>palavras corretas no texto</div>
       <div class="official-metric"><b>${pcpm}</b>velocidade (PCPM)</div>
       <div class="official-metric"><b>${text.precision}%</b>precisão no texto</div>
