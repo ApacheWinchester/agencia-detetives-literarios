@@ -470,6 +470,23 @@
   .empty-state{width:100%;max-width:900px;padding:42px 28px;border:1px dashed rgba(255,255,255,.2);border-radius:22px;
     background:rgba(255,255,255,.045);text-align:center;color:var(--muted)}
   .empty-state b{display:block;color:var(--cream-50);font-size:20px;margin-bottom:7px}
+  .report-library{margin:14px 0 0;padding:16px;border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.045)}
+  .report-library h2{margin:0 0 10px;color:var(--cream-50);font-size:16px}
+  .student-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px}
+  .student-card{border:1px solid rgba(255,255,255,.13);border-radius:14px;background:rgba(255,255,255,.055);color:var(--cream-50);
+    padding:13px;text-align:left;font:inherit;cursor:pointer}
+  .student-card:hover{border-color:rgba(114,223,212,.55);background:rgba(114,223,212,.09)}
+  .student-card b{display:block;font-size:15px;margin-bottom:4px}
+  .student-card small{display:block;color:var(--muted);line-height:1.35}
+  .report-modal{position:fixed;inset:0;z-index:120;background:rgba(4,16,23,.78);display:flex;align-items:center;justify-content:center;padding:22px}
+  .report-modal-card{width:min(1040px,100%);max-height:92vh;display:flex;flex-direction:column;border:1px solid var(--border);
+    border-radius:26px;background:linear-gradient(160deg,var(--navy-800),var(--navy-950));box-shadow:var(--shadow);overflow:hidden}
+  .report-modal-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;justify-content:space-between}
+  .report-modal-head h2{margin:0;color:var(--cream-50);font-size:20px}
+  .report-modal-head small{display:block;color:var(--muted);margin-top:3px}
+  .report-modal-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  .report-modal-body{overflow:auto;padding:18px;display:flex;justify-content:center}
+  .report-modal-body .report{margin:0}
 
   /* Avaliação */
   #s-official{padding-top:82px}
@@ -771,12 +788,15 @@
           <select id="repSel" class="name-in"></select>
           <div class="row">
             <button class="btn teal" id="repPrint">Imprimir / PDF</button>
+            <button class="btn ghost" id="repDownload">Baixar aluno</button>
             <button class="btn ghost" id="repCsv">CSV do aluno</button>
             <button class="btn ghost" id="repShare">Enviar</button>
             <button class="btn pink" id="repPrintAll">PDF da turma</button>
+            <button class="btn pink" id="repDownloadAll">Baixar todos</button>
             <button class="btn ghost" id="repCsvAll">CSV da turma</button>
           </div>
         </div>
+        <div class="report-library" id="reportLibrary"></div>
       </div>
     </div>
     <div id="repBody" style="width:100%;display:flex;flex-direction:column;align-items:center"></div>
@@ -1733,7 +1753,7 @@ function openReport(){
   $("#repEscola").value=state.inst.escola||"";$("#repLocal").value=state.inst.local||"";$("#repProf").value=state.inst.prof||"";
   $("#repTurma").value=state.inst.turma||state.ano||"";$("#repCoord").value=state.inst.coord||"";
   const names=studentNames();const sel=$("#repSel");
-  const actionIds=["repPrint","repCsv","repShare","repPrintAll","repCsvAll"];
+  const actionIds=["repPrint","repDownload","repCsv","repShare","repPrintAll","repDownloadAll","repCsvAll"];
   if(!names.length){
     $("#repBody").innerHTML=`<div class="empty-state">
       <b>Nenhuma avaliação completa registrada</b>
@@ -1741,6 +1761,7 @@ function openReport(){
       <br><br>
       <button class="btn ghost" id="loadDemoBtn" style="border-color: var(--teal); color: var(--teal)">🧪 Carregar Aluno de Teste</button>
     </div>`;
+    $("#reportLibrary").innerHTML="";
     $("#loadDemoBtn").onclick=loadDemoData;
     sel.innerHTML="";sel.appendChild(new Option("Nenhum aluno avaliado",""));sel.disabled=true;
     actionIds.forEach(id=>$("#"+id).disabled=true);show("#s-report");return;
@@ -1748,6 +1769,7 @@ function openReport(){
   sel.disabled=false;actionIds.forEach(id=>$("#"+id).disabled=false);
   sel.innerHTML="";names.forEach(n=>sel.appendChild(new Option(n,n)));
   if(names.indexOf(state.name)>=0)sel.value=state.name;
+  renderReportLibrary(names);
   generateReport(sel.value);show("#s-report");
 }
 // salva campos institucionais e regenera o relatório ao digitar
@@ -1790,6 +1812,110 @@ function recordLevel(r){
   return normalizedProfile(r.perfil)==="Leitor Fluente"?2:1;
 }
 function profileFromLevel(level){return["Pré-leitor","Leitor Iniciante","Leitor Fluente"][level]||"Pré-leitor";}
+function latestAssessmentForStudent(name){
+  return state.assessments.filter(r=>String(r.nome||"").trim()===name).slice(-1)[0]||null;
+}
+function studentReportSummary(name){
+  const recs=recordsForStudent(name),last=recs[recs.length-1]||{};
+  const assessment=latestAssessmentForStudent(name);
+  const perfil=assessment?.perfil||normalizedProfile(last.perfil);
+  const perfilLabel=perfil==="Pré-leitor"&&assessment?.nivelPre?`${perfil} · Nível ${assessment.nivelPre}`:perfil;
+  const precision=precisionValue(assessment?.prec??last.prec);
+  return{
+    name,
+    perfil:perfilLabel,
+    ano:last.ano||assessment?.ano||"2º ano",
+    pcpm:safeNumber(last.pcpm),
+    precision,
+    quiz:assessment?.quiz||last.quiz||"—",
+    date:last.data?fmtDate(last.data):"Sem data",
+    count:recs.length
+  };
+}
+function renderReportLibrary(names){
+  const box=$("#reportLibrary");if(!box)return;
+  if(!names.length){box.innerHTML="";return;}
+  box.innerHTML=`<h2>Arquivo individual dos alunos</h2>
+    <div class="student-list">${names.map((name,i)=>{
+      const s=studentReportSummary(name);
+      return`<button class="student-card" data-student-index="${i}">
+        <b>${esc(s.name)}</b>
+        <small>${esc(s.perfil)} · ${s.pcpm} PCPM · ${s.precision===null?"precisão não registrada":s.precision+"% precisão"}</small>
+        <small>${esc(s.date)} · ${s.count} avaliação(ões)</small>
+      </button>`;
+    }).join("")}</div>`;
+  box.querySelectorAll("[data-student-index]").forEach(btn=>{
+    btn.onclick=()=>openStudentReportModal(names[Number(btn.dataset.studentIndex)]);
+  });
+}
+function reportStylesForDownload(){
+  return Array.from(document.querySelectorAll("style")).map(s=>s.textContent||"").join("\n");
+}
+function reportDocument(title,bodyHtml){
+  return`<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${esc(title)}</title><style>${reportStylesForDownload()}
+    body{overflow:auto!important;background:#fff!important;color:#222!important}
+    .download-shell{display:flex;flex-direction:column;align-items:center;padding:24px}
+    .download-index{width:100%;max-width:900px;margin:0 auto 18px;padding:18px;border:1px solid #d8e1eb;border-radius:8px;font-family:Arial,sans-serif}
+    .download-index h1{color:#17345c;text-align:left;text-shadow:none;font-size:24px}
+    .download-index a{color:#17345c;text-decoration:none}
+    @media print{.download-index{page-break-after:always}.report{box-shadow:none!important}}</style></head>
+    <body><main class="download-shell">${bodyHtml}</main></body></html>`;
+}
+function fileSlug(value){
+  return compact(value).slice(0,48)||"aluno";
+}
+function downloadTextFile(filename,content,type="text/html;charset=utf-8"){
+  const blob=new Blob([content],{type}),a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download=filename;a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+function downloadStudentReport(name){
+  if(!validateReportFields())return;
+  const html=reportInner(name);
+  if(!html){toast("Relatório indisponível.");return;}
+  const title=`Relatório de Fluência - ${name}`;
+  downloadTextFile(`relatorio_${fileSlug(name)}.html`,reportDocument(title,`<div class="report">${html}</div>`));
+  toast("Relatório do aluno baixado.");
+}
+function downloadAllReports(){
+  if(!validateReportFields())return;
+  const names=studentNames();
+  if(!names.length){toast("Sem alunos para baixar.");return;}
+  const index=`<section class="download-index"><h1>Relatórios de Fluência da Turma</h1>
+    <p>${names.length} aluno(s) · ${new Date().toLocaleDateString("pt-BR")}</p>
+    <ol>${names.map((n,i)=>`<li><a href="#aluno-${i+1}">${esc(n)}</a></li>`).join("")}</ol></section>`;
+  const reports=names.map((n,i)=>`<section id="aluno-${i+1}" class="report">${reportInner(n)}</section>`).join("");
+  downloadTextFile(`relatorios_turma_${new Date().toISOString().slice(0,10)}.html`,reportDocument("Relatórios de Fluência da Turma",index+reports));
+  toast("Pacote da turma baixado.");
+}
+function openStudentReportModal(name){
+  const html=reportInner(name);
+  if(!html){toast("Relatório indisponível.");return;}
+  const summary=studentReportSummary(name);
+  const ov=document.createElement("section");
+  ov.className="report-modal noprint";
+  ov.innerHTML=`<div class="report-modal-card" role="dialog" aria-modal="true" aria-label="Relatório de ${esc(name)}">
+    <div class="report-modal-head">
+      <div><h2>${esc(name)}</h2><small>${esc(summary.perfil)} · ${summary.pcpm} PCPM · ${esc(summary.date)}</small></div>
+      <div class="report-modal-actions">
+        <button class="btn ghost" id="modalSelectReport">Abrir na página</button>
+        <button class="btn teal" id="modalDownloadReport">Baixar HTML</button>
+        <button class="btn ghost" id="modalCloseReport">Fechar</button>
+      </div>
+    </div>
+    <div class="report-modal-body"><div class="report">${html}</div></div>
+  </div>`;
+  $("#app").appendChild(ov);
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
+  ov.querySelector("#modalCloseReport").onclick=()=>ov.remove();
+  ov.querySelector("#modalSelectReport").onclick=()=>{$("#repSel").value=name;generateReport(name);ov.remove();};
+  ov.querySelector("#modalDownloadReport").onclick=()=>{
+    if(!validateReportFields()){ov.remove();return;}
+    downloadStudentReport(name);
+  };
+}
 function reportInner(name){
   const recs=recordsForStudent(name);
   if(!recs.length)return"";
@@ -1889,7 +2015,9 @@ function printAllReports(){
 $("#repSel").onchange=e=>generateReport(e.target.value);
 $("#openReport").onclick=openReport;$("#repBack").onclick=openMap;
 $("#repPrint").onclick=()=>{if(validateReportFields())window.print();};
+$("#repDownload").onclick=()=>downloadStudentReport($("#repSel").value);
 $("#repPrintAll").onclick=printAllReports;
+$("#repDownloadAll").onclick=downloadAllReports;
 $("#repCsvAll").onclick=exportCSV;
 $("#repCsv").onclick=()=>{
   const name=$("#repSel").value,recs=recordsForStudent(name);if(!recs.length){toast("Sem dados.");return;}
